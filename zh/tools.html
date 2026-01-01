@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>机器视觉工程师 - 在线工具</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <header class="page-header">
+    <div class="container">
+      <h1 class="h2 mb-2"><i class="fa-solid fa-calculator text-primary"></i> 视觉工程师工具箱</h1>
+      <p class="text-muted mb-0">工程常用快速估算：先算清楚，再做选型。</p>
+    </div>
+  </header>
+
+  <main class="container my-5">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card border-primary h-100">
+          <div class="card-header bg-primary text-white">镜头焦距计算 (Lens Focal Length)</div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label">工作距离 (WD, mm)</label>
+              <input type="number" id="wd" class="form-control" placeholder="例如: 500" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">视场大小 (FOV, mm)</label>
+              <input type="number" id="fov" class="form-control" placeholder="例如: 100" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">传感器尺寸 (Sensor Size, mm)</label>
+              <select id="sensor" class="form-select">
+                <option value="6.4">1/2" (6.4mm)</option>
+                <option value="8.8">2/3" (8.8mm)</option>
+                <option value="12.8">1" (12.8mm)</option>
+              </select>
+            </div>
+            <button class="btn btn-success w-100" onclick="calculateFocal()">计算</button>
+            <div class="mt-3 alert alert-secondary mb-0">
+              结果焦距: <span id="result-focal" class="fw-bold text-danger">---</span> mm
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">分辨率估算 (mm/px)</div>
+          <div class="card-body">
+            <p class="text-muted small">输入 FOV 与像素宽度，得到每像素对应的毫米数。</p>
+            <div class="mb-3">
+              <label class="form-label">视场宽度 (FOV width, mm)</label>
+              <input type="number" id="fovWidth" class="form-control" placeholder="例如: 100" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">图像宽度 (Image width, px)</label>
+              <input type="number" id="imgWidth" class="form-control" placeholder="例如: 2448" />
+            </div>
+            <button class="btn btn-outline-primary w-100" onclick="calculateResolution()">计算</button>
+            <div class="mt-3 alert alert-secondary mb-0">
+              结果: <span id="result-res" class="fw-bold text-danger">---</span> mm/px
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h2 class="h4 mb-3"><i class="fa-solid fa-list-check text-primary"></i> 工具清单</h2>
+      <div class="list-group">
+        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="../Colorful%20Adventure%20Wheel.html">
+          <div>
+            <div class="fw-semibold">Colorful Adventure Wheel</div>
+            <div class="small text-muted">现成转盘工具（可用于抽奖/随机选择）</div>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-muted"></i>
+        </a>
+      </div>
+      <p class="text-muted small mt-2 mb-0">后续新增工具：在此列表继续添加链接即可。</p>
+    </div>
+
+    <div class="alert alert-light border mt-4 mb-0">
+      需求太复杂算不准？提供非标视觉系统选型/计算服务 → <a href="about.html">联系我</a>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools.js"></script>
+</body>
+</html>
