@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多彩冒险大转盘 | Colorful Adventure Wheel</title>
+    <style>
+        :root {
+            /* 马卡龙色系 */
+            --c-pink: #FFC3C3;
+            --c-blue: #A0E7E5;
+            --c-yellow: #FBE7C6;
+            --c-green: #B4F8C8;
+            --c-purple: #E0BBE4;
+            --c-text: #555;
+            --c-bg: #F9F9F9;
+            --c-primary: #FF9AA2;
+            --c-primary-hover: #FFB7B2;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--c-bg);
+            color: var(--c-text);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 顶部导航 */
+        header {
+            background: white;
+            padding: 10px 20px;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; color: var(--c-primary); }
+
+        .lang-switch {
+            cursor: pointer;
+            padding: 5px 12px;
+            border: 2px solid var(--c-primary);
+            border-radius: 20px;
+            color: var(--c-primary);
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .lang-switch:hover { background: var(--c-primary); color: white; }
+
+        /* 主布局 */
+        main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 左侧：活动管理 */
+        .sidebar {
+            width: 350px;
+            background: white;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 0;
+            border: none;
+            background: #eee;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--c-primary); color: white; }
+
+        .add-box {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        .add-box input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .add-box button {
+            padding: 0 15px;
+            background: var(--c-green);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #444;
+        }
+
+        .activity-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #fdfdfd;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .activity-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        }
+
+        .activity-item.selected {
+            border-color: var(--c-primary);
+            background: #FFF0F1;
+        }
+
+        .item-check {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .activity-item.selected .item-check {
+            background: var(--c-primary);
+            border-color: var(--c-primary);
+        }
+        .activity-item.selected .item-check::after {
+            content: '✔';
+            color: white;
+            font-size: 12px;
+        }
+        .selection-count {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* 中间：转盘区域 */
+        .wheel-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, #fff 0%, #f0f0f0 100%);
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            width: 80vmin;
+            height: 80vmin;
+            max-width: 500px;
+            max-height: 500px;
+            margin-bottom: 30px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0s; /* 动画由JS控制 */
+        }
+
+        /* 指针 SVG */
+        .pointer {
+            position: absolute;
+            top: -30px; /* 轻微重叠 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            z-index: 20;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+        }
+
+        .center-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--c-primary);
+            font-weight: bold;
+            color: var(--c-primary);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .spin-btn-lg {
+            padding: 15px 50px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(45deg, var(--c-primary), var(--c-primary-hover));
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 154, 162, 0.4);
+            transition: all 0.3s;
+        }
+        .spin-btn-lg:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .spin-btn-lg:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 154, 162, 0.6);
+        }
+
+        .status-text {
+            position: absolute;
+            top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--c-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .status-text.show { opacity: 1; }
+
+        /* 结果卡片 */
+        .result-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .result-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-card {
+            background: white;
+            width: 340px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-top: 10px solid var(--c-purple);
+        }
+        .result-overlay.active .result-card {
+            transform: scale(1);
+        }
+
+        .result-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            background: #ccc;
+        }
+        .result-title { font-size: 1.8rem; margin: 0 0 10px 0; color: #333; }
+        .result-desc { color: #666; margin-bottom: 20px; line-height: 1.5; }
+        .ai-box {
+            background: #f4f6ff;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--c-blue);
+        }
+        .ai-label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
+        .ai-text { font-size: 0.9rem; color: #444; font-style: italic; }
+
+        /* Canvas 纸屑 */
+        #confetti-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 101;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            main { flex-direction: column-reverse; overflow-y: auto; }
+            .sidebar { width: 100%; height: 40%; border-right: none; border-top: 1px solid #eee; }
+            .wheel-container { height: 60%; padding: 20px; }
+            .canvas-wrapper { width: 60vmin; height: 60vmin; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎡 <span id="app-title">多彩冒险大转盘</span></h1>
+        <button class="lang-switch" id="lang-btn">EN</button>
+    </header>
+
+    <main>
+        <!-- 左侧：管理面板 -->
+        <div class="sidebar">
+            <div class="category-tabs" id="category-tabs">
+                <!-- 动态生成 -->
+            </div>
+
+            <div class="add-box">
+                <input type="text" id="new-activity-input" placeholder="输入新活动...">
+                <button id="add-btn">+</button>
+            </div>
+
+            <div class="activity-list" id="activity-list">
+                <!-- 动态生成 -->
+            </div>
+
+            <p class="selection-count" id="selection-count">已选 0/12</p>
+        </div>
+
+        <!-- 中间：转盘 -->
+        <div class="wheel-container">
+            <div class="status-text" id="status-text">转盘旋转中...</div>
+            
+            <div class="canvas-wrapper">
+                <!-- SVG 指针 -->
+                <svg class="pointer" viewBox="0 0 54 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 手指部分 -->
+                    <path d="M27 60L27 60" stroke="black" stroke-width="2"/>
+                    <path d="M14 0C21.732 0 28 6.26801 28 14V34C28 34.5523 28.4477 35 29 35C29.5523 35 30 34.5523 30 34V18C30 15.7909 31.7909 14 34 14C36.2091 14 38 15.7909 38 18V34C38 34.5523 38.4477 35 39 35C39.5523 35 40 34.5523 40 34V20C40 17.7909 41.7909 16 44 16C46.2091 16 48 17.7909 48 20V42C48 51.9411 39.9411 60 30 60H24C14.0589 60 6 51.9411 6 42V14C6 6.26801 12.268 0 20 0H14Z" fill="#ff6b6b" stroke="white" stroke-width="3"/>
+                    <circle cx="27" cy="62" r="2" fill="#333"/>
+                </svg>
+
+                <canvas id="wheel-canvas" width="1000" height="1000"></canvas>
+                <div class="center-btn" id="center-btn">GO</div>
+            </div>
+
+            <button class="spin-btn-lg" id="spin-btn">开启冒险</button>
+        </div>
+
+        <!-- 结果覆盖层 -->
+        <div class="result-overlay" id="result-overlay">
+            <canvas id="confetti-canvas"></canvas>
+            <div class="result-card">
+                <span class="result-tag" id="res-tag">娱乐</span>
+                <h2 class="result-title" id="res-title">看一场电影</h2>
+                <p class="result-desc" id="res-desc">选一部评分高的经典电影，准备好爆米花！</p>
+                <div class="ai-box">
+                    <span class="ai-label">AI 建议</span>
+                    <span class="ai-text" id="res-ai">生活需要一点仪式感，尽情享受这2小时吧。</span>
+                </div>
+                <button class="spin-btn-lg" style="font-size: 1rem; padding: 10px 30px;" id="reset-btn">新的冒险</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        /**
+         * 数据源与配置
+         */
+        const COLORS = {
+            categories: ['#FFC3C3', '#A0E7E5', '#FBE7C6', '#E0BBE4'], // 粉(娱), 蓝(探), 黄(学), 紫(社)
+            macaron: ['#FFC3C3', '#FFD1DC', '#A0E7E5', '#B4F8C8', '#FBE7C6', '#FFFCCB', '#E0BBE4', '#D7AEFB', '#FFB7B2', '#E2F0CB']
+        };
+
+        const TEXTS = {
+            zh: {
+                title: '多彩冒险大转盘',
+                categories: ['娱乐', '探索', '学习', '社交'],
+                placeholder: '输入新活动标题...',
+                count: (c, m) => `已选 ${c}/${m}`,
+                spin: '开启冒险',
+                spinning: '转盘旋转中...',
+                aiLabel: 'AI 建议',
+                reset: '新的冒险',
+                go: 'GO',
+                tips: {
+                    maxCat: '该分类活动已满10个',
+                    maxTotal: '最多只能选择12个活动',
+                    min: '请至少选择1个活动'
+                },
+                defaultData: [
+                    // 娱乐
+                    [
+                        { t: '看一部电影', d: '找一部评分8.0以上的经典高分电影' },
+                        { t: 'K歌', d: '去KTV或者在家里尽情欢唱' },
+                        { t: '玩电子游戏', d: '尝试一款新的Steam游戏或通关老游戏' },
+                        { t: '烹饪新菜', d: '跟着教程做一道从未尝试过的菜系' },
+                        { t: '拼图/积木', d: '沉浸在1000块拼图或乐高的世界里' },
+                        { t: '泡澡放松', d: '点上香薰蜡烛，在这个澡里泡30分钟' }
+                    ],
+                    // 探索
+                    [
+                        { t: '城市漫步', d: '不带目的地，在城市里随机行走5公里' },
+                        { t: '探访新店', d: '去一家从未去过的咖啡馆或书店' },
+                        { t: '拍摄夕阳', d: '找个高地，记录今天的日落时刻' },
+                        { t: '夜骑', d: '骑共享单车在此刻的街道穿行' },
+                        { t: '逛博物馆', d: '去最近的博物馆或艺术展看一看' },
+                        { t: '公园野餐', d: '带上三明治，去公园草坪躺平' }
+                    ],
+                    // 学习
+                    [
+                        { t: '读一本书', d: '静下心来阅读30页实体书' },
+                        { t: '学新单词', d: '背诵20个新语言的单词或短语' },
+                        { t: '看纪录片', d: '了解自然、历史或科技的新知识' },
+                        { t: '冥想', d: '跟随引导音频进行15分钟冥想' },
+                        { t: '写日记', d: '记录当下的心情和对未来的期许' },
+                        { t: '整理房间', d: '断舍离，扔掉5件不需要的东西' }
+                    ],
+                    // 社交
+                    [
+                        { t: '给朋友打电话', d: '和许久未见的老友畅聊20分钟' },
+                        { t: '家庭游戏夜', d: '组织家人玩桌游或扑克' },
+                        { t: '写信/明信片', d: '手写一份祝福寄给远方的人' },
+                        { t: '赞美他人', d: '真心实意地夸奖身边的三个人' },
+                        { t: '参加聚会', d: '查看同城活动，报名参加一个' },
+                        { t: '分享美食', d: '做了好吃的，分给邻居或同事' }
+                    ]
+                ],
+                aiSuggestions: [
+                    "这次体验可能会成为你美好回忆的一部分。",
+                    "勇敢踏出这一步，你会发现新大陆。",
+                    "专注于过程的享受，而不仅仅是结果。",
+                    "这正是放松身心、充电的最佳时机。",
+                    "叫上伙伴一起，快乐会加倍哦！"
+                ]
+            },
+            en: {
+                title: 'Colorful Adventure Wheel',
+                categories: ['Entertainment', 'Exploration', 'Learning', 'Social'],
+                placeholder: 'Enter activity title...',
+                count: (c, m) => `Selected ${c}/${m}`,
+                spin: 'Start Adventure',
+                spinning: 'Spinning...',
+                aiLabel: 'AI Suggestion',
+                reset: 'New Adventure',
+                go: 'GO',
+                tips: {
+                    maxCat: 'Max 10 activities per category',
+                    maxTotal: 'Max 12 activities total',
+                    min: 'Select at least 1 activity'
+                },
+                defaultData: [
+                    // Entertainment
+                    [
+                        { t: 'Watch a Movie', d: 'Find a classic movie with high rating' },
+                        { t: 'Karaoke', d: 'Sing your heart out at home or KTV' },
+                        { t: 'Video Games', d: 'Try a new indie game or finish an old one' },
+                        { t: 'Cook New Dish', d: 'Follow a recipe you never tried before' },
+                        { t: 'Puzzle/Lego', d: 'Immerse yourself in a 1000-piece puzzle' },
+                        { t: 'Bubble Bath', d: 'Light candles and relax for 30 mins' }
+                    ],
+                    // Exploration
+                    [
+                        { t: 'City Walk', d: 'Walk 5km in the city without destination' },
+                        { t: 'Visit New Shop', d: 'Go to a cafe or bookstore you never visited' },
+                        { t: 'Sunset Photo', d: 'Find a high spot and capture the sunset' },
+                        { t: 'Night Ride', d: 'Ride a bike through the streets tonight' },
+                        { t: 'Museum', d: 'Visit the nearest museum or art gallery' },
+                        { t: 'Picnic', d: 'Take sandwiches to the park lawn' }
+                    ],
+                    // Learning
+                    [
+                        { t: 'Read a Book', d: 'Read 30 pages of a physical book' },
+                        { t: 'Learn Words', d: 'Memorize 20 words of a new language' },
+                        { t: 'Documentary', d: 'Learn about nature, history or tech' },
+                        { t: 'Meditation', d: 'Do a 15 min guided meditation' },
+                        { t: 'Journaling', d: 'Write down feelings and future goals' },
+                        { t: 'Declutter', d: 'Throw away 5 things you do not need' }
+                    ],
+                    // Social
+                    [
+                        { t: 'Call a Friend', d: 'Chat with an old friend for 20 mins' },
+                        { t: 'Game Night', d: 'Organize board games with family' },
+                        { t: 'Write Letter', d: 'Handwrite a card to someone far away' },
+                        { t: 'Compliment', d: 'Sincerely praise 3 people around you' },
+                        { t: 'Join Party', d: 'Check local events and join one' },
+                        { t: 'Share Food', d: 'Share your cooking with neighbors' }
+                    ]
+                ],
+                aiSuggestions: [
+                    "This experience might become a great memory.",
+                    "Be brave, you will discover something new.",
+                    "Focus on the process, not just the result.",
+                    "Perfect time to recharge your energy.",
+                    "Bring a friend, happiness doubles!"
+                ]
+            }
+        };
+
+        // 全局状态
+        let state = {
+            lang: 'zh',
+            currentCatIdx: 0,
+            activities: JSON.parse(JSON.stringify(TEXTS.zh.defaultData)), // 深拷贝
+            selected: [] // 存储 { catIdx, itemIdx, title, desc, color }
+        };
+
+        // 初始化选中 (默认每类选前1个，共4个)
+        for(let i=0; i<4; i++) {
+            if(state.activities[i][0]) {
+                state.selected.push({
+                    catIdx: i,
+                    itemIdx: 0,
+                    title: state.activities[i][0].t,
+                    desc: state.activities[i][0].d,
+                    color: COLORS.categories[i]
+                });
+                state.activities[i][0].selected = true;
+            }
+        }
+
+        /**
+         * DOM 元素获取
+         */
+        const els = {
+            appTitle: document.getElementById('app-title'),
+            langBtn: document.getElementById('lang-btn'),
+            tabs: document.getElementById('category-tabs'),
+            list: document.getElementById('activity-list'),
+            input: document.getElementById('new-activity-input'),
+            addBtn: document.getElementById('add-btn'),
+            count: document.getElementById('selection-count'),
+            wheelCanvas: document.getElementById('wheel-canvas'),
+            spinBtn: document.getElementById('spin-btn'),
+            centerBtn: document.getElementById('center-btn'),
+            statusText: document.getElementById('status-text'),
+            overlay: document.getElementById('result-overlay'),
+            resTag: document.getElementById('res-tag'),
+            resTitle: document.getElementById('res-title'),
+            resDesc: document.getElementById('res-desc'),
+            resAi: document.getElementById('res-ai'),
+            resLabel: document.querySelector('.ai-label'),
+            resetBtn: document.getElementById('reset-btn'),
+            confettiCanvas: document.getElementById('confetti-canvas'),
+            inputPlaceholder: document.getElementById('new-activity-input')
+        };
+
+        /**
+         * 核心逻辑：UI 渲染
+         */
+        function renderUI() {
+            const txt = TEXTS[state.lang];
+            
+            // 文本更新
+            els.appTitle.innerText = txt.title;
+            els.spinBtn.innerText = txt.spin;
+            els.centerBtn.innerText = txt.go;
+            els.resetBtn.innerText = txt.reset;
+            els.statusText.innerText = txt.spinning;
+            els.resLabel.innerText = txt.aiLabel;
+            els.inputPlaceholder.placeholder = txt.placeholder;
+
+            // 渲染 Tabs
+            els.tabs.innerHTML = '';
+            txt.categories.forEach((cat, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${idx === state.currentCatIdx ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.style.setProperty('--c-primary', COLORS.categories[idx]);
+                btn.onclick = () => {
+                    state.currentCatIdx = idx;
+                    renderUI();
+                };
+                els.tabs.appendChild(btn);
+            });
+
+            // 渲染列表
+            els.list.innerHTML = '';
+            const currentItems = state.activities[state.currentCatIdx];
+            currentItems.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `activity-item ${item.selected ? 'selected' : ''}`;
+                div.style.setProperty('--c-primary', COLORS.categories[state.currentCatIdx]);
+                div.innerHTML = `
+                    <div class="item-check"></div>
+                    <div>
+                        <div style="font-weight:bold">${item.t}</div>
+                        <div style="font-size:0.8rem;color:#999">${item.d || ''}</div>
+                    </div>
+                `;
+                div.onclick = () => toggleSelection(state.currentCatIdx, idx);
+                els.list.appendChild(div);
+            });
+
+            // 更新计数与按钮状态
+            els.count.innerText = txt.count(state.selected.length, 12);
+            
+            const canSpin = state.selected.length > 0;
+            els.spinBtn.disabled = !canSpin;
+            els.centerBtn.style.opacity = canSpin ? '1' : '0.5';
+            els.centerBtn.style.pointerEvents = canSpin ? 'auto' : 'none';
+
+            // 绘制转盘
+            drawWheel();
+        }
+
+        // 切换选中状态
+        function toggleSelection(catIdx, itemIdx) {
+            const item = state.activities[catIdx][itemIdx];
+            const txt = TEXTS[state.lang];
+
+            if (item.selected) {
+                item.selected = false;
+                // 从 selected 数组移除
+                state.selected = state.selected.filter(s => !(s.catIdx === catIdx && s.itemIdx === itemIdx));
+            } else {
+                if (state.selected.length >= 12) {
+                    alert(txt.tips.maxTotal);
+                    return;
+                }
+                item.selected = true;
+                state.selected.push({
+                    catIdx: catIdx,
+                    itemIdx: itemIdx,
+                    title: item.t,
+                    desc: item.d,
+                    color: COLORS.categories[catIdx]
+                });
+            }
+            renderUI();
+        }
+
+        // 添加新活动
+        els.addBtn.onclick = () => {
+            const val = els.input.value.trim();
+            const txt = TEXTS[state.lang];
+            const currentList = state.activities[state.currentCatIdx];
+
+            if (!val) return;
+            if (currentList.length >= 10) {
+                alert(txt.tips.maxCat);
+                return;
+            }
+
+            currentList.push({ t: val, d: '', selected: false }); // 默认不选中
+            els.input.value = '';
+            // 自动选中新添加的？根据需求是"归类"，这里逻辑是添加后用户手动选
+            renderUI();
+        };
+
+        // 切换语言
+        els.langBtn.onclick = () => {
+             // 简易切换，重置数据以匹配语言（实际项目可能需要映射ID）
+             const nextLang = state.lang === 'zh' ? 'en' : 'zh';
+             if(confirm(state.lang === 'zh' ? '切换语言将重置当前选择，确定吗？' : 'Switching language will reset selections, sure?')) {
+                 state.lang = nextLang;
+                 state.activities = JSON.parse(JSON.stringify(TEXTS[state.lang].defaultData));
+                 state.selected = [];
+                 els.langBtn.innerText = nextLang === 'zh' ? 'EN' : '中文';
+                 renderUI();
+             }
+        };
+
+        /**
+         * 转盘绘制逻辑
+         */
+        const ctx = els.wheelCanvas.getContext('2d');
+        const W = 1000; // Canvas 内部分辨率
+        let currentRotation = 0; // 当前旋转角度
+
+        function drawWheel() {
+            ctx.clearRect(0, 0, W, W);
+            const cx = W/2, cy = W/2, r = W/2 - 20;
+            const count = state.selected.length;
+
+            if (count === 0) {
+                // 空状态
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fillStyle = '#eee';
+                ctx.fill();
+                return;
+            }
+
+            const arcSize = (Math.PI * 2) / count;
+            
+            // 为了让第0项居中对着顶部指针，我们需要偏移
+            // 默认 Canvas 0度在3点钟。要让0度在12点钟，需旋转-90度 (-PI/2)
+            // 此外，为了让扇形"中心"对准12点，而不是扇形"边缘"对准12点，还需旋转 -arcSize/2
+            const startOffset = -Math.PI/2 - arcSize/2;
+
+            ctx.save();
+            // 应用当前物理旋转
+            ctx.translate(cx, cy);
+            ctx.rotate(currentRotation * Math.PI / 180);
+            ctx.translate(-cx, -cy);
+
+            for (let i = 0; i < count; i++) {
+                const angle = startOffset + i * arcSize;
+                
+                // 扇形
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, r, angle, angle + arcSize);
+                ctx.closePath();
+                
+                // 颜色循环
+                // 如果是同类相连稍微调整一下色差，这里直接用大分类颜色
+                // 需求：马卡龙色系区分。
+                // 方案：使用大类的颜色，但为了区分相邻块，可以叠加轻微透明度或亮度变化，
+                // 或者直接使用 macaron 调色板循环，忽略分类色
+                // 需求：每个分区显示活动标题。结果卡片显示分类色。
+                // 这里的视觉效果我们用预设的 macaron 数组循环，看起来更丰富
+                ctx.fillStyle = COLORS.macaron[i % COLORS.macaron.length];
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                // 文字
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(angle + arcSize / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#555";
+                ctx.font = "bold 40px 'Segoe UI', sans-serif";
+                const text = state.selected[i].title;
+                // 截断文字
+                let displayTxt = text;
+                if (text.length > 8) displayTxt = text.substring(0, 7) + '..';
+                ctx.fillText(displayTxt, r - 50, 10);
+                ctx.restore();
+            }
+            ctx.restore();
+        }
+
+        /**
+         * 转盘物理逻辑
+         */
+        let isSpinning = false;
+        
+        function startSpin() {
+            if (isSpinning || state.selected.length === 0) return;
+            isSpinning = true;
+            els.spinBtn.disabled = true;
+            els.centerBtn.style.pointerEvents = 'none';
+            els.statusText.classList.add('show');
+
+            // 1. 随机选定目标
+            const count = state.selected.length;
+            const targetIndex = Math.floor(Math.random() * count);
+            const targetItem = state.selected[targetIndex];
+
+            // 2. 计算目标角度
+            // 当前指针在顶部 (12点)。
+            // 我们绘制时，Index 0 的中心实际上是在 -90 度位置 (canvas坐标系，加上我们的 startOffset 后)
+            // 当 rotation = 0 时，Index 0 对应指针。
+            // 当 rotation = -arcSize (逆时针转一个格)，Index 1 对应指针。
+            // 目标角度 Rotation = - (Index * 360/count)
+            // 为了多转几圈，我们加上 N * 360
+            // 但因为 canvas 旋转正向是顺时针，为了让看起来像那个方向转，我们需要确定方向。
+            // 假设我们顺时针旋转转盘 (angle 增加)。
+            // 增加 360 度，回到原点。
+            // 要让 Index 1 到达顶部，转盘需要逆时针转 (Angle 减小) 或者 顺时针转 (Angle 增加) 一大圈减去一格。
+            // 逻辑: 目标角度 = (360 - (targetIndex * 360 / count)) % 360 + randomOffset?
+            // 简化：最终角度 = TotalRotations * 360 + (360 - targetIndex * (360/count))
+            // 此时 Index 0 转了 (360 - idx*step)，刚好让 Index idx 转到 0 的位置。
+
+            const sectorAngle = 360 / count;
+            const targetRotationBase = (360 - (targetIndex * sectorAngle)); 
+            
+            // 添加 5 圈 (5 * 360)
+            const extraSpins = 5 * 360; 
+            // 最终目标总角度
+            const finalAngle = extraSpins + targetRotationBase;
+            
+            // 重置当前角度到 0-360 范围内，避免数字过大
+            currentRotation = currentRotation % 360;
+            
+            // 动画参数
+            // 需求：1s加速，3s匀速，2s减速。 总共6s。
+            // 距离 S = S_acc + S_const + S_dec
+            // 设最大速度为 V (度/帧 或 度/ms，这里使用 requestAnimationFrame，假设60fps)
+            // 时间：T1=1s, T2=3s, T3=2s
+            // S_acc = 0.5 * V * T1
+            // S_const = V * T2
+            // S_dec = 0.5 * V * T3
+            // Total S = 0.5V + 3V + 1V = 4.5V (这里的单位是 V*秒)
+            // 所以 V_per_sec = TotalDistance / 4.5
+            // 我们需要让 TotalDistance 接近 finalAngle，但要减去当前起始角度。
+            
+            let distanceNeed = finalAngle - currentRotation;
+            // 确保距离是正数且足够大
+            if (distanceNeed < extraSpins) distanceNeed += 360;
+
+            const vMaxPerSec = distanceNeed / 4.5; 
+            
+            // 动画循环变量
+            let startTime = null;
+
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = (timestamp - startTime) / 1000; // 秒
+
+                let vCurrent = 0; // 当前速度 (度/秒)
+                let dCurrent = 0; // 当前这一帧应该在的位置 (需积分计算，稍微复杂)
+
+                // 简单的积分太麻烦，我们根据时间计算当前应该走过的总距离的比例? 
+                // 不行，那个不是匀速。
+                // 我们直接计算在当前时间点，应该走过的 总距离 S(t)
+                
+                let s = 0;
+                
+                if (elapsed <= 1) {
+                    // 加速阶段: s = 0.5 * a * t^2.  a = vMax / 1.
+                    const a = vMaxPerSec;
+                    s = 0.5 * a * elapsed * elapsed;
+                } else if (elapsed <= 4) {
+                    // 匀速阶段: s = s1 + v * (t - 1)
+                    const s1 = 0.5 * vMaxPerSec; // 1秒末的距离
+                    s = s1 + vMaxPerSec * (elapsed - 1);
+                } else if (elapsed <= 6) {
+                    // 减速阶段: s = s_total - 0.5 * a_dec * (6 - t)^2
+                    // 反向思考：距离终点还有多少。 减速是加速的逆过程。
+                    // 剩余时间 t_rem = 6 - elapsed.
+                    // 剩余距离 s_rem = 0.5 * (vMax / 2) * t_rem^2 ??? 
+                    // 减速度 a_dec = vMax / 2.
+                    const t_rem = 6 - elapsed;
+                    s = distanceNeed - (0.5 * (vMaxPerSec/2) * t_rem * t_rem);
+                } else {
+                    // 结束
+                    s = distanceNeed;
+                }
+
+                // 更新当前角度
+                const renderAngle = (currentRotation + s); // currentRotation 是初始值
+                
+                // 绘制
+                // 注意：drawWheel 使用全局变量 currentRotation，这里我们临时覆盖它或者重构 drawWheel
+                // 简单点：drawWheel 依赖一个变量，我们更新那个变量
+                const tempRotation = renderAngle;
+                
+                // 渲染
+                const finalRenderAngle = tempRotation;
+                
+                // 这里有个小Hack，drawWheel用的是全局currentRotation
+                // 我们不修改全局currentRotation的基本值，而是让drawWheel画的时候用这个值
+                const realCtxDrawValue = currentRotation; // 保存初始值
+                currentRotation = finalRenderAngle; 
+                drawWheel();
+                currentRotation = realCtxDrawValue; // 恢复初始值以便下一帧计算基于初始值
+
+                if (elapsed < 6) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // 动画结束
+                    currentRotation = finalRenderAngle % 360; // 固化最终角度
+                    drawWheel(); // 最终绘制
+                    isSpinning = false;
+                    els.statusText.classList.remove('show');
+                    showResult(targetItem);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+        
+        // 绑定两个按钮
+        els.spinBtn.onclick = startSpin;
+        els.centerBtn.onclick = startSpin;
+
+        // 显示结果
+        function showResult(item) {
+            const txt = TEXTS[state.lang];
+            
+            // 数据填充
+            els.resTag.innerText = txt.categories[item.catIdx];
+            els.resTag.style.backgroundColor = item.color;
+            els.resTag.style.color = '#555'; // 如果背景太浅，文字深一点，或者维持白色
+            
+            els.resTitle.innerText = item.title;
+            els.resDesc.innerText = item.desc;
+            
+            // 随机 AI 建议
+            const rndAi = txt.aiSuggestions[Math.floor(Math.random() * txt.aiSuggestions.length)];
+            els.resAi.innerText = rndAi;
+
+            // 显示
+            els.overlay.classList.add('active');
+            
+            // 纸屑特效
+            startConfetti();
+        }
+
+        // 重置
+        els.resetBtn.onclick = () => {
+            els.overlay.classList.remove('active');
+            stopConfetti();
+            els.spinBtn.disabled = false;
+            els.centerBtn.style.pointerEvents = 'auto';
+        }
+
+        /**
+         * 纸屑效果 (简易版)
+         */
+        let confettiLoop;
+        const particles = [];
+        
+        function startConfetti() {
+            const canvas = els.confettiCanvas;
+            const ctxC = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            for(let i=0; i<100; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 1) * 20,
+                    color: COLORS.macaron[Math.floor(Math.random()*COLORS.macaron.length)],
+                    size: Math.random() * 8 + 4,
+                    life: 1
+                });
+            }
+
+            function update() {
+                ctxC.clearRect(0,0, canvas.width, canvas.height);
+                for(let i=0; i<particles.length; i++) {
+                    let p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.5; // 重力
+                    p.life -= 0.01;
+                    
+                    ctxC.globalAlpha = p.life;
+                    ctxC.fillStyle = p.color;
+                    ctxC.fillRect(p.x, p.y, p.size, p.size);
+                }
+                // 移除死掉的粒子
+                let alive = false;
+                for(let i=particles.length-1; i>=0; i--) {
+                    if(particles[i].life <= 0) particles.splice(i, 1);
+                    else alive = true;
+                }
+                
+                if(alive) confettiLoop = requestAnimationFrame(update);
+                else ctxC.clearRect(0,0,canvas.width,canvas.height);
+            }
+            update();
+        }
+
+        function stopConfetti() {
+            cancelAnimationFrame(confettiLoop);
+            particles.length = 0;
+            const canvas = els.confettiCanvas;
+            const ctxC = canvas.getContext('2d');
+            ctxC.clearRect(0,0,canvas.width,canvas.height);
+        }
+
+        // 窗口大小调整适配
+        window.addEventListener('resize', () => {
+            drawWheel();
+        });
+
+        // 初始化
+        renderUI();
+
+    </script>
+</body>
+</html>
