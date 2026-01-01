@@ -6,179 +6,2045 @@
   <title>机器视觉工程师 - 案例详情</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ===== 全局科技风格 ===== */
+    :root {
+      --primary-color: #00f0ff;
+      --secondary-color: #0066ff;
+      --accent-color: #ff00ff;
+      --dark-bg: #0a0a1a;
+      --card-bg: rgba(15, 25, 50, 0.8);
+      --text-color: #e0e0e0;
+      --glow-color: rgba(0, 240, 255, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ===== 动态粒子背景 ===== */
+    #particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      animation: float 15s infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* ===== 网格背景 ===== */
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+    }
+
+    /* ===== 高科技导航栏 ===== */
+    .navbar {
+      background: rgba(10, 10, 26, 0.95) !important;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 0;
+      transition: all 0.3s ease;
+      min-height: 80px;
+    }
+
+    .navbar-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px;
+      height: 80px;
+    }
+
+    .navbar-brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .navbar-brand i {
+      color: var(--primary-color);
+      -webkit-text-fill-color: var(--primary-color);
+      font-size: 2rem;
+      filter: drop-shadow(0 0 15px var(--primary-color));
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { filter: drop-shadow(0 0 15px var(--primary-color)); }
+      50% { filter: drop-shadow(0 0 25px var(--primary-color)); }
+    }
+
+    /* ===== 导航菜单 ===== */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-color) !important;
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.05), rgba(0, 102, 255, 0.05));
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::before { left: 100%; }
+    .nav-link:hover::after { width: 100%; }
+
+    .nav-link:hover {
+      color: var(--primary-color) !important;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 102, 255, 0.1));
+      border-color: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 10px 30px rgba(0, 240, 255, 0.2),
+        0 0 20px rgba(0, 240, 255, 0.1);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 5px currentColor);
+    }
+
+    .nav-link:hover i {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 10px var(--primary-color));
+    }
+
+    .nav-link.active {
+      color: var(--primary-color) !important;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 102, 255, 0.15));
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .nav-link.active::after { width: 100%; }
+
+    .nav-link .corner {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--primary-color);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-link .corner-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+    .nav-link .corner-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+    .nav-link .corner-bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+    .nav-link .corner-br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+
+    .nav-link:hover .corner { opacity: 1; }
+
+    /* ===== 语言切换器 ===== */
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 15px;
+      padding: 8px 16px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 20px;
+    }
+
+    .lang-switcher a {
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .lang-switcher a:hover,
+    .lang-switcher a.active {
+      color: var(--primary-color);
+      background: rgba(0, 240, 255, 0.2);
+    }
+
+    .lang-switcher span {
+      color: rgba(0, 240, 255, 0.5);
+    }
+
+    /* ===== 移动端菜单按钮 ===== */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn.active span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+
+    .mobile-menu-btn.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* ===== 页面头部 ===== */
+    .page-header {
+      padding: 140px 0 60px;
+      position: relative;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.08), transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      z-index: -1;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-title i {
+      color: var(--primary-color);
+      -webkit-text-fill-color: var(--primary-color);
+      filter: drop-shadow(0 0 20px var(--primary-color));
+    }
+
+    .header-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    /* ===== 返回按钮 ===== */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 30px;
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(0, 240, 255, 0.1);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      transform: translateX(-5px);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    .back-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .back-btn:hover i {
+      transform: translateX(-5px);
+    }
+
+    /* ===== 主要内容区 ===== */
+    .main-content {
+      padding: 40px 0 100px;
+      position: relative;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 992px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== 内容卡片 ===== */
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover {
+      border-color: rgba(0, 240, 255, 0.3);
+      box-shadow: 0 15px 50px rgba(0, 240, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .content-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-title i {
+      color: var(--primary-color);
+      filter: drop-shadow(0 0 10px var(--primary-color));
+    }
+
+    .card-title .title-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.3), transparent);
+      margin-left: 10px;
+    }
+
+    /* ===== 概述文本 ===== */
+    .overview-text {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--text-color);
+      opacity: 0.9;
+    }
+
+    /* ===== 列表样式 ===== */
+    .tech-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tech-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .tech-list li:last-child {
+      border-bottom: none;
+    }
+
+    .tech-list li:hover {
+      padding-left: 10px;
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.05), transparent);
+    }
+
+    .list-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .list-icon.challenge {
+      background: linear-gradient(135deg, rgba(255, 100, 100, 0.2), rgba(255, 50, 50, 0.1));
+      border: 1px solid rgba(255, 100, 100, 0.3);
+    }
+
+    .list-icon.challenge i {
+      color: #ff6b6b;
+      font-size: 0.8rem;
+    }
+
+    .list-icon.approach {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 102, 255, 0.1));
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .list-icon.approach i {
+      color: var(--primary-color);
+      font-size: 0.8rem;
+    }
+
+    .list-icon.result {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    .list-icon.result i {
+      color: #00ff88;
+      font-size: 0.8rem;
+    }
+
+    .list-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-color);
+    }
+
+    /* ===== 侧边栏卡片 ===== */
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sidebar-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--secondary-color));
+    }
+
+    /* ===== 案例图片 ===== */
+    .case-image-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .case-image-wrapper:hover .case-image {
+      transform: scale(1.05);
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(10, 10, 26, 0.9) 100%);
+      pointer-events: none;
+    }
+
+    .image-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+    }
+
+    /* ===== 侧边栏内容 ===== */
+    .sidebar-content {
+      padding: 30px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 25px;
+    }
+
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-title i {
+      color: var(--primary-color);
+      filter: drop-shadow(0 0 8px var(--primary-color));
+    }
+
+    /* ===== 技术标签 ===== */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tech-tag {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 102, 255, 0.1));
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: var(--primary-color);
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .tech-tag:hover {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(0, 102, 255, 0.2));
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== 行业标签 ===== */
+    .domain-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .domain-tag {
+      background: transparent;
+      border: 1px solid rgba(255, 0, 255, 0.3);
+      color: var(--accent-color);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .domain-tag:hover {
+      background: rgba(255, 0, 255, 0.1);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+    }
+
+    /* ===== 分隔线 ===== */
+    .sidebar-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+      margin: 20px 0;
+    }
+
+    /* ===== CTA 框 ===== */
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(255, 0, 255, 0.05));
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+      animation: ctaGlow 10s linear infinite;
+    }
+
+    @keyframes ctaGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .cta-text {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.6);
+      color: #000;
+    }
+
+    /* ===== 相关案例 ===== */
+    .related-cases {
+      margin-top: 30px;
+    }
+
+    .related-case-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.03);
+      border: 1px solid rgba(0, 240, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .related-case-item:hover {
+      border-color: var(--primary-color);
+      background: rgba(0, 240, 255, 0.08);
+      transform: translateX(5px);
+    }
+
+    .related-case-icon {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 102, 255, 0.1));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .related-case-icon i {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+
+    .related-case-info h6 {
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .related-case-info span {
+      color: var(--text-color);
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    /* ===== 扫描线 ===== */
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      animation: scan 8s linear infinite;
+      opacity: 0.3;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+
+    /* ===== 光标跟随 ===== */
+    .cursor-glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.15), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+    }
+
+    /* ===== 页脚 ===== */
+    footer {
+      background: rgba(5, 5, 15, 0.95);
+      border-top: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 60px 0 30px;
+      position: relative;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand h3 {
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+
+    .footer-brand p {
+      color: var(--text-color);
+      opacity: 0.7;
+      max-width: 300px;
+    }
+
+    .footer-links h4 {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color);
+      opacity: 1;
+      padding-left: 5px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--primary-color);
+      color: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      opacity: 0.6;
+    }
+
+    /* ===== 响应式设计 ===== */
+    @media (max-width: 1200px) {
+      .nav-link {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(10, 10, 26, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 20px;
+        gap: 10px;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        transform: translateY(-150%);
+        opacity: 0;
+        transition: all 0.4s ease;
+        z-index: 999;
+      }
+
+      .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .nav-link {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 30px;
+        font-size: 1.1rem;
+      }
+
+      .lang-switcher {
+        margin-left: 0;
+        margin-top: 10px;
+        justify-content: center;
+      }
+
+      .header-title {
+        font-size: 2rem;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        padding: 120px 0 40px;
+      }
+
+      .header-content {
+        flex-direction: column;
+      }
+
+      .content-card {
+        padding: 20px;
+      }
+
+      .sidebar-content {
+        padding: 20px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-brand p {
+        max-width: 100%;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    /* ===== 加载动画 ===== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ===== 滚动条样式 ===== */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(10, 10, 26, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+    }
+  </style>
 </head>
 <body>
-  <div id="navbar-placeholder"></div>
+  <!-- 扫描线效果 -->
+  <div class="scan-line"></div>
+  
+  <!-- 光标跟随 -->
+  <div class="cursor-glow" id="cursorGlow"></div>
 
+  <!-- 粒子背景 -->
+  <div id="particles-container"></div>
+  
+  <!-- 网格背景 -->
+  <div class="grid-bg"></div>
+
+  <!-- 高科技导航栏 -->
+  <nav class="navbar fixed-top">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fa-solid fa-eye"></i>
+        <span>视觉工程师</span>
+      </a>
+      
+      <!-- 移动端菜单按钮 -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- 导航菜单 -->
+      <ul class="nav-menu" id="navMenu">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-home"></i>
+            <span>首页</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="solutions.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>行业案例</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tools.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-tools"></i>
+            <span>工具箱</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="blog.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-blog"></i>
+            <span>技术博客</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-user"></i>
+            <span>关于我</span>
+          </a>
+        </li>
+        <!-- 语言切换器 -->
+        <li class="nav-item">
+          <div class="lang-switcher">
+            <a href="case-detail.html" class="active">中文</a>
+            <span>|</span>
+            <a href="case-detail-en.html">EN</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 页面头部 -->
   <header class="page-header">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="header-content">
         <div>
-          <h1 class="h2 mb-1"><i class="fa-solid fa-file-lines text-primary"></i> <span id="case-title">案例详情</span></h1>
-          <p class="text-muted mb-0" id="case-subtitle">—</p>
+          <h1 class="header-title">
+            <i class="fa-solid fa-file-lines"></i>
+            <span id="case-title">案例详情</span>
+          </h1>
+          <p class="header-subtitle" id="case-subtitle">—</p>
         </div>
-        <a class="btn btn-outline-secondary" href="solutions.html"><i class="fa-solid fa-arrow-left"></i> 返回案例列表</a>
+        <a class="back-btn" href="solutions.html">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>返回案例列表</span>
+        </a>
       </div>
     </div>
   </header>
 
-  <main class="container my-5">
-    <div class="row g-4">
-      <div class="col-lg-7">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">项目概述</h5>
-            <p class="text-muted mb-0" id="case-overview">—</p>
+  <!-- 主要内容 -->
+  <main class="main-content">
+    <div class="container">
+      <div class="content-grid">
+        <!-- 左侧内容区 -->
+        <div class="left-content">
+          <!-- 项目概述 -->
+          <div class="content-card fade-in-up">
+            <h5 class="card-title">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span>项目概述</span>
+              <span class="title-line"></span>
+            </h5>
+            <p class="overview-text" id="case-overview">—</p>
+          </div>
+
+          <!-- 挑战 -->
+          <div class="content-card fade-in-up" style="animation-delay: 0.1s;">
+            <h5 class="card-title">
+              <i class="fa-solid fa-exclamation-triangle"></i>
+              <span>技术挑战</span>
+              <span class="title-line"></span>
+            </h5>
+            <ul class="tech-list" id="case-challenges"></ul>
+          </div>
+
+          <!-- 方案与落地 -->
+          <div class="content-card fade-in-up" style="animation-delay: 0.2s;">
+            <h5 class="card-title">
+              <i class="fa-solid fa-cogs"></i>
+              <span>解决方案</span>
+              <span class="title-line"></span>
+            </h5>
+            <ul class="tech-list" id="case-approach"></ul>
+          </div>
+
+          <!-- 效果 -->
+          <div class="content-card fade-in-up" style="animation-delay: 0.3s;">
+            <h5 class="card-title">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>实施效果</span>
+              <span class="title-line"></span>
+            </h5>
+            <ul class="tech-list" id="case-results"></ul>
           </div>
         </div>
 
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">挑战</h5>
-            <ul class="mb-0" id="case-challenges"></ul>
-          </div>
-        </div>
-
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">方案与落地</h5>
-            <ul class="mb-0" id="case-approach"></ul>
-          </div>
-        </div>
-
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">效果</h5>
-            <ul class="mb-0" id="case-results"></ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-5">
-        <div class="card shadow-sm">
-          <img id="case-image" src="../assets/images/solutions/wafer.svg" class="card-img-top" alt="case" />
-          <div class="card-body">
-            <h5 class="card-title">技术关键词</h5>
-            <div class="d-flex flex-wrap gap-2" id="case-tags"></div>
-
-            <hr />
-
-            <h6 class="text-muted">适用行业</h6>
-            <div class="d-flex flex-wrap gap-2" id="case-domains"></div>
-
-            <hr />
-
-            <div class="alert alert-light border mb-0">
-              想复用这类方案到你的产线？
-              <a href="about.html">联系我</a>
+        <!-- 右侧边栏 -->
+        <div class="right-sidebar">
+          <!-- 案例信息卡片 -->
+          <div class="sidebar-card fade-in-up" style="animation-delay: 0.4s;">
+            <div class="case-image-wrapper">
+              <img id="case-image" src="../assets/images/solutions/wafer.svg" class="case-image" alt="案例图片" />
+              <div class="image-overlay"></div>
+              <span class="image-badge">实战案例</span>
             </div>
+            
+            <div class="sidebar-content">
+              <!-- 技术关键词 -->
+              <div class="sidebar-section">
+                <h6 class="sidebar-title">
+                  <i class="fa-solid fa-tags"></i>
+                  <span>技术关键词</span>
+                </h6>
+                <div class="tech-tags" id="case-tags"></div>
+              </div>
+
+              <div class="sidebar-divider"></div>
+
+              <!-- 适用行业 -->
+              <div class="sidebar-section">
+                <h6 class="sidebar-title">
+                  <i class="fa-solid fa-industry"></i>
+                  <span>适用行业</span>
+                </h6>
+                <div class="domain-tags" id="case-domains"></div>
+              </div>
+
+              <div class="sidebar-divider"></div>
+
+              <!-- CTA 行动召唤 -->
+              <div class="cta-box">
+                <p class="cta-text">
+                  <i class="fa-solid fa-rocket"></i>
+                  想复用这类方案到你的产线？
+                </p>
+                <a class="cta-btn" href="about.html">
+                  <i class="fa-solid fa-envelope"></i>
+                  <span>联系我</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 相关案例 -->
+          <div class="related-cases fade-in-up" style="animation-delay: 0.5s;">
+            <h6 class="sidebar-title" style="margin-bottom: 15px;">
+              <i class="fa-solid fa-link"></i>
+              <span>相关案例</span>
+            </h6>
+            <a href="case-detail.html?id=threec" class="related-case-item">
+              <div class="related-case-icon">
+                <i class="fa-solid fa-mobile-alt"></i>
+              </div>
+              <div class="related-case-info">
+                <h6>3C外观缺陷检测</h6>
+                <span>复杂反光背景下的检测</span>
+              </div>
+            </a>
+            <a href="case-detail.html?id=assembly" class="related-case-item">
+              <div class="related-case-icon">
+                <i class="fa-solid fa-car"></i>
+              </div>
+              <div class="related-case-info">
+                <h6>装配定位与测量</h6>
+                <span>高精度定位与节拍优化</span>
+              </div>
+            </a>
+            <a href="case-detail.html?id=battery" class="related-case-item">
+              <div class="related-case-icon">
+                <i class="fa-solid fa-battery-full"></i>
+              </div>
+              <div class="related-case-info">
+                <h6>电池/模组检测</h6>
+                <span>一体化检测方案</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <div id="footer-placeholder"></div>
+  <!-- 页脚 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3><i class="fa-solid fa-eye me-2"></i>视觉工程师</h3>
+          <p>专注机器视觉技术分享，赋能智能制造产业升级。</p>
+          <div class="social-links">
+            <a href="#" title="微信"><i class="fa-brands fa-weixin"></i></a>
+            <a href="#" title="B站"><i class="fa-brands fa-bilibili"></i></a>
+            <a href="#" title="知乎"><i class="fa-brands fa-zhihu"></i></a>
+            <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>快速链接</h4>
+          <ul>
+            <li><a href="solutions.html">行业案例</a></li>
+            <li><a href="tools.html">工具箱</a></li>
+            <li><a href="blog.html">技术博客</a></li>
+            <li><a href="about.html">关于我</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>技术领域</h4>
+          <ul>
+            <li><a href="#">OpenCV</a></li>
+            <li><a href="#">深度学习</a></li>
+            <li><a href="#">缺陷检测</a></li>
+            <li><a href="#">3D视觉</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>行业应用</h4>
+          <ul>
+            <li><a href="#">3C电子</a></li>
+            <li><a href="#">汽车制造</a></li>
+            <li><a href="#">半导体</a></li>
+            <li><a href="#">新能源</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 机器视觉工程师. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/main.js"></script>
   <script>
-    (function () {
-      const cases = {
-        wafer: {
-          title: '晶圆表面缺陷检测',
-          subtitle: '微小划痕/异物的稳定检出与误检控制',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: '面向半导体产线的外观缺陷检测任务，要求在复杂纹理与噪声背景下稳定检出微小缺陷，并满足节拍与可维护性。',
-          challenges: ['缺陷尺度小、形态多样', '背景纹理复杂，传统阈值/滤波不稳定', '误检成本高，需要可解释的复核机制'],
-          approach: ['数据闭环：采集-标注-验证与难例挖掘', '模型训练与部署：YOLO/分割思路 + 工业化推理', '与传统算法结合：ROI约束、几何规则、结果可信度'],
-          results: ['稳定检出微小划痕/异物', '误检率降低（可通过规则/二次判定进一步优化）', '部署流程可复用到同类外观检测工位'],
-          tags: ['YOLO', 'OpenCV', '工业部署', '难例挖掘'],
-          domains: ['半导体']
-        },
-        threec: {
-          title: '3C外观缺陷检测',
-          subtitle: '复杂反光背景下的检测与误检控制',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: '针对高反光/高纹理的3C外观件，建立稳定的检测与质量判定策略。',
-          challenges: ['高反光导致亮斑/阴影变化大', '样本差异与工艺波动', '节拍要求与部署维护成本'],
-          approach: ['光学与成像协同：角度/偏振/曝光策略', '算法：传统规则 + 深度学习融合', '工程：参数配置化与可视化诊断'],
-          results: ['在工艺波动下保持较稳定效果', '降低人工复判压力', '方案可复制到同类外观任务'],
-          tags: ['成像优化', '传统+AI', '诊断工具'],
-          domains: ['3C电子']
-        },
-        assembly: {
-          title: '装配定位与测量',
-          subtitle: '高精度定位、尺寸测量与节拍优化',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: '面向装配工位的定位与测量任务，强调精度、稳定性和节拍。',
-          challenges: ['公差紧、定位精度要求高', '夹具/振动/光照带来的扰动', '测量链路需要可追溯'],
-          approach: ['Halcon/OpenCV：亚像素定位与几何拟合', '标定：相机-镜头-工装标定流程', '工程化：日志、阈值、结果追溯'],
-          results: ['满足装配定位精度需求', '测量结果可追溯', '与产线节拍兼容'],
-          tags: ['Halcon', '亚像素', '标定', '测量'],
-          domains: ['汽车制造']
-        },
-        battery: {
-          title: '电池/模组检测',
-          subtitle: '外观 + 尺寸 + 标识的一体化检测',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: '在新能源产线中，将外观、尺寸与标识读码融合，减少设备与工位数量。',
-          challenges: ['检测项多、流程复杂', '不同相机/光源的一致性', '系统集成与维护成本'],
-          approach: ['架构：多相机/多任务统一调度', '算法：外观缺陷 + 几何测量 + OCR/读码', '工程：异常可视化与快速定位'],
-          results: ['减少工位拆分，提升整体效率', '降低维护成本', '提升产线异常定位速度'],
-          tags: ['多任务', 'OCR', '系统集成'],
-          domains: ['新能源']
+    // ===== 案例数据 =====
+    const cases = {
+      wafer: {
+        title: '晶圆表面缺陷检测',
+        subtitle: '微小划痕/异物的稳定检出与误检控制',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: '面向半导体产线的外观缺陷检测任务，要求在复杂纹理与噪声背景下稳定检出微小缺陷，并满足节拍与可维护性。该项目通过深度学习与传统算法结合，实现了高精度、低误检的智能检测系统。',
+        challenges: [
+          '缺陷尺度小、形态多样，传统阈值方法难以适应',
+          '背景纹理复杂，噪声干扰大，稳定性要求高',
+          '误检成本高，需要可解释的复核机制与追溯能力'
+        ],
+        approach: [
+          '数据闭环：建立采集-标注-验证流程，持续难例挖掘优化模型',
+          '模型训练与部署：采用YOLO/分割算法 + TensorRT工业化推理加速',
+          '与传统算法结合：ROI区域约束、几何规则过滤、结果可信度评估'
+        ],
+        results: [
+          '稳定检出微小划痕/异物，检出率提升至98%以上',
+          '误检率降低60%，通过规则/二次判定进一步优化',
+          '部署流程标准化，可快速复用到同类外观检测工位'
+        ],
+        tags: ['YOLO', 'OpenCV', 'TensorRT', '工业部署', '难例挖掘'],
+        domains: ['半导体']
+      },
+      threec: {
+        title: '3C外观缺陷检测',
+        subtitle: '复杂反光背景下的检测与误检控制',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: '针对高反光/高纹理的3C外观件，建立稳定的检测与质量判定策略。通过光学优化与AI算法结合，解决反光、阴影等复杂场景下的检测难题。',
+        challenges: [
+          '高反光导致亮斑/阴影变化大，成像不稳定',
+          '样本差异与工艺波动，模型泛化能力要求高',
+          '节拍要求严格，部署维护成本需要控制'
+        ],
+        approach: [
+          '光学与成像协同：优化拍摄角度/偏振光/曝光策略',
+          '算法融合：传统规则 + 深度学习双重验证',
+          '工程化：参数配置化与可视化诊断工具'
+        ],
+        results: [
+          '在工艺波动下保持稳定效果，准确率达95%+',
+          '降低人工复判压力，效率提升40%',
+          '方案可快速复制到同类外观检测任务'
+        ],
+        tags: ['成像优化', '传统+AI', '诊断工具', 'Halcon'],
+        domains: ['3C电子']
+      },
+      assembly: {
+        title: '装配定位与测量',
+        subtitle: '高精度定位、尺寸测量与节拍优化',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: '面向装配工位的定位与测量任务，强调精度、稳定性和节拍。通过亚像素定位与标定技术，实现高精度测量与快速响应。',
+        challenges: [
+          '公差紧、定位精度要求达到±0.05mm级别',
+          '夹具/振动/光照带来的扰动影响测量稳定性',
+          '测量链路需要可追溯，满足质量体系要求'
+        ],
+        approach: [
+          'Halcon/OpenCV：亚像素边缘检测与几何拟合算法',
+          '标定流程：相机-镜头-工装完整标定与误差补偿',
+          '工程化：日志记录、阈值管理、结果追溯系统'
+        ],
+        results: [
+          '满足装配定位精度需求，重复精度±0.03mm',
+          '测量结果可追溯，符合ISO质量体系',
+          '与产线节拍兼容，单次测量<2秒'
+        ],
+        tags: ['Halcon', '亚像素', '标定', '测量', 'OpenCV'],
+        domains: ['汽车制造']
+      },
+      battery: {
+        title: '电池/模组检测',
+        subtitle: '外观 + 尺寸 + 标识的一体化检测',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: '在新能源产线中，将外观、尺寸与标识读码融合，减少设备与工位数量。通过多任务统一调度，提升整体效率。',
+        challenges: [
+          '检测项多、流程复杂，需要多相机协同',
+          '不同相机/光源的一致性难以保证',
+          '系统集成与维护成本高，需要降本增效'
+        ],
+        approach: [
+          '架构设计：多相机/多任务统一调度与同步触发',
+          '算法整合：外观缺陷 + 几何测量 + OCR/读码一体化',
+          '工程优化：异常可视化与快速定位诊断工具'
+        ],
+        results: [
+          '减少工位拆分，整体效率提升30%',
+          '降低维护成本，统一管理平台',
+          '提升产线异常定位速度，故障响应时间缩短50%'
+        ],
+        tags: ['多任务', 'OCR', '系统集成', 'PaddleOCR'],
+        domains: ['新能源']
+      }
+    };
+
+    // ===== 获取URL参数 =====
+    const params = new URLSearchParams(window.location.search);
+    const caseId = params.get('id') || 'wafer';
+    const caseData = cases[caseId] || cases.wafer;
+
+    // ===== 设置文本内容 =====
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    // ===== 设置列表内容 =====
+    function setList(id, items, iconClass, iconName) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '';
+      
+      items.forEach((text) => {
+        const li = document.createElement('li');
+        
+        const iconDiv = document.createElement('div');
+        iconDiv.className = `list-icon ${iconClass}`;
+        iconDiv.innerHTML = `<i class="fa-solid ${iconName}"></i>`;
+        
+        const textDiv = document.createElement('div');
+        textDiv.className = 'list-text';
+        textDiv.textContent = text;
+        
+        li.appendChild(iconDiv);
+        li.appendChild(textDiv);
+        el.appendChild(li);
+      });
+    }
+
+    // ===== 设置标签 =====
+    function setTags(id, items, className) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '';
+      
+      items.forEach((text) => {
+        const span = document.createElement('span');
+        span.className = className;
+        span.textContent = text;
+        el.appendChild(span);
+      });
+    }
+
+    // ===== 填充页面内容 =====
+    setText('case-title', caseData.title);
+    setText('case-subtitle', caseData.subtitle);
+    setText('case-overview', caseData.overview);
+    
+    setList('case-challenges', caseData.challenges, 'challenge', 'fa-exclamation-circle');
+    setList('case-approach', caseData.approach, 'approach', 'fa-check-circle');
+    setList('case-results', caseData.results, 'result', 'fa-trophy');
+
+    const img = document.getElementById('case-image');
+    if (img) img.src = caseData.image;
+
+    setTags('case-tags', caseData.tags, 'tech-tag');
+    setTags('case-domains', caseData.domains, 'domain-tag');
+
+    document.title = `机器视觉工程师 - ${caseData.title}`;
+
+    // ===== 创建粒子效果 =====
+    function createParticles() {
+      const container = document.getElementById('particles-container');
+      const particleCount = 40;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        
+        const size = Math.random() * 3 + 1;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        const colors = ['#00f0ff', '#0066ff', '#ff00ff', '#00ff88'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        container.appendChild(particle);
+      }
+    }
+
+    // ===== 光标跟随效果 =====
+    document.addEventListener('mousemove', (e) => {
+      const glow = document.getElementById('cursorGlow');
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // ===== 导航栏滚动效果 =====
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(10, 10, 26, 0.98)';
+        navbar.style.boxShadow = '0 5px 30px rgba(0, 240, 255, 0.1)';
+      } else {
+        navbar.style.background = 'rgba(10, 10, 26, 0.95)';
+        navbar.style.boxShadow = 'none';
+      }
+    });
+
+    // ===== 移动端菜单切换 =====
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== 卡片悬停效果 =====
+    function initCardEffects() {
+      const cards = document.querySelectorAll('.content-card, .sidebar-card');
+      
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+        });
+      });
+    }
+
+    // ===== 标签悬停效果 =====
+    function initTagEffects() {
+      const tags = document.querySelectorAll('.tech-tag, .domain-tag');
+      
+      tags.forEach(tag => {
+        tag.addEventListener('mouseenter', () => {
+          tag.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+        
+        tag.addEventListener('mouseleave', () => {
+          tag.style.transform = 'translateY(0) scale(1)';
+        });
+      });
+    }
+
+    // ===== 列表项动画 =====
+    function animateListItems() {
+      const listItems = document.querySelectorAll('.tech-list li');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateX(0)';
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      listItems.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+        item.style.transition = 'all 0.5s ease';
+        observer.observe(item);
+      });
+    }
+
+// ===== 相关案例悬停效果 =====
+function initRelatedCaseEffects() {
+      const items = document.querySelectorAll('.related-case-item');
+      
+      items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          const icon = item.querySelector('.related-case-icon i');
+          if (icon) {
+            icon.style.transform = 'scale(1.2) rotate(10deg)';
+            icon.style.transition = 'transform 0.3s ease';
+          }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          const icon = item.querySelector('.related-case-icon i');
+          if (icon) {
+            icon.style.transform = 'scale(1) rotate(0deg)';
+          }
+        });
+      });
+    }
+
+    // ===== 图片悬停效果 =====
+    function initImageEffects() {
+      const imageWrapper = document.querySelector('.case-image-wrapper');
+      const image = document.querySelector('.case-image');
+      
+      if (imageWrapper && image) {
+        imageWrapper.addEventListener('mouseenter', () => {
+          image.style.transform = 'scale(1.1)';
+        });
+        
+        imageWrapper.addEventListener('mouseleave', () => {
+          image.style.transform = 'scale(1)';
+        });
+      }
+    }
+
+    // ===== 社交链接悬停效果 =====
+    function initSocialEffects() {
+      const socialLinks = document.querySelectorAll('.social-links a');
+      
+      socialLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          link.style.transform = 'translateY(-5px) rotate(10deg)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          link.style.transform = 'translateY(0) rotate(0deg)';
+        });
+      });
+    }
+
+    // ===== 页脚链接悬停效果 =====
+    function initFooterEffects() {
+      const footerLinks = document.querySelectorAll('.footer-links a');
+      
+      footerLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          link.style.paddingLeft = '10px';
+          link.style.color = 'var(--primary-color)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          link.style.paddingLeft = '0';
+          link.style.color = '';
+        });
+      });
+    }
+
+    // ===== CTA按钮涟漪效果 =====
+    function initRippleEffect() {
+      const ctaBtn = document.querySelector('.cta-btn');
+      
+      if (ctaBtn) {
+        ctaBtn.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+          `;
+          
+          this.style.position = 'relative';
+          this.style.overflow = 'hidden';
+          this.appendChild(ripple);
+          
+          setTimeout(() => ripple.remove(), 600);
+        });
+      }
+
+      // 添加涟漪动画关键帧
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes ripple {
+          to {
+            transform: scale(4);
+            opacity: 0;
+          }
         }
-      };
+      `;
+      document.head.appendChild(style);
+    }
 
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id') || 'wafer';
-      const data = cases[id] || cases.wafer;
-
-      const setText = (id, value) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value;
-      };
-
-      const setList = (id, items) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.innerHTML = '';
-        items.forEach((t) => {
-          const li = document.createElement('li');
-          li.textContent = t;
-          el.appendChild(li);
+    // ===== 返回按钮效果 =====
+    function initBackButtonEffect() {
+      const backBtn = document.querySelector('.back-btn');
+      
+      if (backBtn) {
+        backBtn.addEventListener('mouseenter', () => {
+          backBtn.style.transform = 'translateX(-10px)';
         });
-      };
-
-      const setBadges = (id, items, cls) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.innerHTML = '';
-        items.forEach((t) => {
-          const span = document.createElement('span');
-          span.className = cls;
-          span.textContent = t;
-          el.appendChild(span);
+        
+        backBtn.addEventListener('mouseleave', () => {
+          backBtn.style.transform = 'translateX(0)';
         });
-      };
+      }
+    }
 
-      setText('case-title', data.title);
-      setText('case-subtitle', data.subtitle);
-      setText('case-overview', data.overview);
-      setList('case-challenges', data.challenges);
-      setList('case-approach', data.approach);
-      setList('case-results', data.results);
+    // ===== 滚动显示动画 =====
+    function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.content-card, .sidebar-card, .related-cases');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
 
-      const img = document.getElementById('case-image');
-      if (img) img.src = data.image;
+      revealElements.forEach(el => {
+        if (!el.classList.contains('fade-in-up')) {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(30px)';
+          el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+          observer.observe(el);
+        }
+      });
+    }
 
-      setBadges('case-tags', data.tags, 'badge text-bg-primary');
-      setBadges('case-domains', data.domains, 'badge rounded-pill text-bg-dark');
+    // ===== 平滑滚动 =====
+    function initSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    }
 
-      document.title = `机器视觉工程师 - ${data.title}`;
-    })();
+    // ===== 键盘导航支持 =====
+    function initKeyboardNav() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          mobileMenuBtn.classList.remove('active');
+          navMenu.classList.remove('active');
+        }
+      });
+    }
+
+    // ===== 页面加载进度效果 =====
+    function initLoadingProgress() {
+      const progressBar = document.createElement('div');
+      progressBar.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        z-index: 9999;
+        transition: width 0.3s ease;
+      `;
+      document.body.appendChild(progressBar);
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress >= 100) {
+          progressBar.style.width = '100%';
+          clearInterval(interval);
+          setTimeout(() => {
+            progressBar.style.opacity = '0';
+            setTimeout(() => progressBar.remove(), 300);
+          }, 200);
+        } else {
+          progressBar.style.width = progress + '%';
+        }
+      }, 100);
+    }
+
+    // ===== 列表项悬停图标旋转效果 =====
+    function initListIconEffects() {
+      const listItems = document.querySelectorAll('.tech-list li');
+      
+      listItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          const icon = item.querySelector('.list-icon i');
+          if (icon) {
+            icon.style.transform = 'rotate(360deg)';
+            icon.style.transition = 'transform 0.5s ease';
+          }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          const icon = item.querySelector('.list-icon i');
+          if (icon) {
+            icon.style.transform = 'rotate(0deg)';
+          }
+        });
+      });
+    }
+
+    // ===== 标题线条动画 =====
+    function initTitleLineAnimation() {
+      const titleLines = document.querySelectorAll('.title-line');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.width = '100%';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      titleLines.forEach(line => {
+        line.style.width = '0';
+        line.style.transition = 'width 0.8s ease';
+        observer.observe(line);
+      });
+    }
+
+    // ===== 页面可见性变化处理 =====
+    document.addEventListener('visibilitychange', () => {
+      const particles = document.querySelectorAll('.particle');
+      if (document.hidden) {
+        // 页面隐藏时暂停动画（节省资源）
+        particles.forEach(p => {
+          p.style.animationPlayState = 'paused';
+        });
+      } else {
+        // 页面可见时恢复动画
+        particles.forEach(p => {
+          p.style.animationPlayState = 'running';
+        });
+      }
+    });
+
+    // ===== 窗口大小改变时重新计算 =====
+    window.addEventListener('resize', () => {
+      // 关闭移动端菜单
+      if (window.innerWidth > 992) {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== 图片懒加载（可选） =====
+    function initLazyLoading() {
+      const images = document.querySelectorAll('img[data-src]');
+      
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            imageObserver.unobserve(img);
+          }
+        });
+      });
+
+      images.forEach(img => imageObserver.observe(img));
+    }
+
+    // ===== 返回顶部按钮（可选） =====
+    function initBackToTop() {
+      const backToTopBtn = document.createElement('button');
+      backToTopBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+      backToTopBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: #000;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 240, 255, 0.4);
+      `;
+      
+      document.body.appendChild(backToTopBtn);
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          backToTopBtn.style.opacity = '1';
+          backToTopBtn.style.transform = 'translateY(0)';
+        } else {
+          backToTopBtn.style.opacity = '0';
+          backToTopBtn.style.transform = 'translateY(100px)';
+        }
+      });
+
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      backToTopBtn.addEventListener('mouseenter', () => {
+        backToTopBtn.style.transform = 'translateY(0) scale(1.1)';
+        backToTopBtn.style.boxShadow = '0 8px 30px rgba(0, 240, 255, 0.6)';
+      });
+
+      backToTopBtn.addEventListener('mouseleave', () => {
+        backToTopBtn.style.transform = 'translateY(0) scale(1)';
+        backToTopBtn.style.boxShadow = '0 5px 20px rgba(0, 240, 255, 0.4)';
+      });
+    }
+
+    // ===== 复制链接功能（可选） =====
+    function initCopyLink() {
+      const copyBtn = document.createElement('button');
+      copyBtn.innerHTML = '<i class="fa-solid fa-link"></i> 复制链接';
+      copyBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        padding: 12px 20px;
+        background: rgba(0, 240, 255, 0.1);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        border-radius: 30px;
+        color: var(--primary-color);
+        font-weight: 600;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      `;
+      
+      document.body.appendChild(copyBtn);
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          copyBtn.style.opacity = '1';
+          copyBtn.style.transform = 'translateY(0)';
+        } else {
+          copyBtn.style.opacity = '0';
+          copyBtn.style.transform = 'translateY(100px)';
+        }
+      });
+
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
+          setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fa-solid fa-link"></i> 复制链接';
+          }, 2000);
+        });
+      });
+
+      copyBtn.addEventListener('mouseenter', () => {
+        copyBtn.style.background = 'rgba(0, 240, 255, 0.2)';
+        copyBtn.style.borderColor = 'var(--primary-color)';
+      });
+
+      copyBtn.addEventListener('mouseleave', () => {
+        copyBtn.style.background = 'rgba(0, 240, 255, 0.1)';
+        copyBtn.style.borderColor = 'rgba(0, 240, 255, 0.3)';
+      });
+    }
+
+    // ===== 初始化所有效果 =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // 核心功能
+      createParticles();
+      
+      // 交互效果
+      initCardEffects();
+      initTagEffects();
+      animateListItems();
+      initRelatedCaseEffects();
+      initImageEffects();
+      initListIconEffects();
+      initTitleLineAnimation();
+      
+      // 按钮效果
+      initBackButtonEffect();
+      initRippleEffect();
+      
+      // 导航与交互
+      initSocialEffects();
+      initFooterEffects();
+      initSmoothScroll();
+      initKeyboardNav();
+      
+      // 页面动画
+      initScrollReveal();
+      
+      // 可选功能（取消注释以启用）
+      // initLoadingProgress();
+      // initLazyLoading();
+      initBackToTop();
+      // initCopyLink();
+      
+      console.log('🚀 案例详情页面初始化完成！');
+      console.log('📊 当前案例:', caseData.title);
+    });
   </script>
 </body>
 </html>
