@@ -1,118 +1,484 @@
+这是一个基于中文版代码改写的**英文版 (resources-en.html)**。
+
+**主要调整：**
+1.  **语言本地化**：所有文本翻译为英文。
+2.  **链接调整**：导航链接指向英文版页面（如 `index-en.html`）。
+3.  **内容微调**：为了适应英文语境，将“关注公众号”的提示文案调整为更通用的“安全验证”或“订阅获取”，但保持了原有的 UI 结构和交互逻辑。
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vision Engineer - Share</title>
+  <title>Machine Vision Engineer - Resource Library</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ===== Global Variables ===== */
+    :root {
+      --primary-color: #00f0ff;
+      --secondary-color: #0066ff;
+      --accent-color: #ff00ff;
+      --success-color: #00ff88;
+      --dark-bg: #0a0a1a;
+      --card-bg: rgba(15, 25, 50, 0.8);
+      --text-color: #e0e0e0;
+    }
+
+    /* ===== Basic Settings ===== */
+    body {
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== Background Effects ===== */
+    #particles-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+    }
+
+    .grid-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+    }
+
+    .scan-line {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      animation: scan 8s linear infinite;
+      opacity: 0.3;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+    /* ===== Navbar (Simplified) ===== */
+    .navbar {
+      background: rgba(10, 10, 26, 0.95) !important;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+    }
+    .navbar-brand {
+      color: var(--primary-color) !important;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+    .nav-link {
+      color: var(--text-color) !important;
+      transition: color 0.3s;
+    }
+    .nav-link:hover { color: var(--primary-color) !important; }
+
+    /* ===== Page Header ===== */
+    .page-header {
+      padding: 120px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff, var(--primary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .page-subtitle {
+      color: var(--text-color);
+      opacity: 0.7;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== Resource Table ===== */
+    .resource-container {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .resource-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tech-table th {
+      background: rgba(0, 240, 255, 0.05);
+      color: var(--primary-color);
+      padding: 20px;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .tech-table td {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .tech-table tr:hover td {
+      background: rgba(0, 240, 255, 0.03);
+      color: #fff;
+    }
+
+    .file-icon {
+      margin-right: 10px;
+      color: var(--primary-color);
+      width: 25px;
+      text-align: center;
+    }
+
+    /* ===== Type Badges ===== */
+    .type-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-dataset { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.3); }
+    .badge-doc { background: rgba(255, 0, 255, 0.1); color: #ff00ff; border: 1px solid rgba(255, 0, 255, 0.3); }
+    .badge-code { background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.3); }
+    .badge-tool { background: rgba(255, 165, 0, 0.1); color: #ffa500; border: 1px solid rgba(255, 165, 0, 0.3); }
+
+    /* ===== Action Buttons ===== */
+    .btn-tech {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 102, 255, 0.1));
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-tech:hover {
+      background: var(--primary-color);
+      color: #000;
+      box-shadow: 0 0 15px var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Modal (Hacking Style) ===== */
+    .modal-content {
+      background: rgba(10, 10, 26, 0.95);
+      border: 1px solid var(--primary-color);
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+      backdrop-filter: blur(20px);
+      color: var(--text-color);
+      border-radius: 10px;
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      background: rgba(0, 240, 255, 0.05);
+    }
+
+    .modal-title {
+      color: var(--primary-color);
+      font-family: 'Segoe UI', monospace;
+      letter-spacing: 1px;
+    }
+    
+    .modal-title i { margin-right: 10px; animation: blink 1s infinite; }
+
+    .btn-close {
+      filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    .qr-container {
+      position: relative;
+      display: inline-block;
+      padding: 10px;
+      border: 1px dashed var(--primary-color);
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .qr-container::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+      z-index: -1;
+    }
+
+    .code-box {
+      background: #000;
+      color: var(--success-color);
+      font-family: 'Consolas', monospace;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      font-size: 1.2rem;
+      margin: 0 5px;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .tech-table thead { display: none; }
+      .tech-table tr { 
+        display: block; 
+        margin-bottom: 20px; 
+        border: 1px solid rgba(0, 240, 255, 0.1);
+        border-radius: 10px;
+        padding: 15px;
+      }
+      .tech-table td { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        padding: 10px 0;
+        border: none;
+      }
+      .tech-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: var(--primary-color);
+        opacity: 0.7;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="navbar-placeholder"></div>
+  <!-- Visual Effects Layer -->
+  <div class="scan-line"></div>
+  <div id="particles-container"></div>
+  <div class="grid-bg"></div>
 
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index-en.html"><i class="fa-solid fa-eye me-2"></i>Vision Engineer</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index-en.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="solutions-en.html">Case Studies</a></li>
+          <li class="nav-item"><a class="nav-link active" href="resources-en.html">Resources</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
   <header class="page-header">
     <div class="container">
-      <h1 class="h2 mb-2"><i class="fa-solid fa-share-nodes text-primary"></i> Share</h1>
-      <p class="text-muted mb-0">Curated resources, templates, and quick references.</p>
+      <h1 class="page-title">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>Resource Library</span>
+      </h1>
+      <p class="page-subtitle">Curated datasets, project templates, and checklist tools to accelerate your vision projects.</p>
     </div>
   </header>
 
-  <main class="container my-5">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
+  <!-- Main Content -->
+  <main class="container mb-5 flex-grow-1">
+    <div class="resource-container fade-in-up">
+      <table class="tech-table">
         <thead>
           <tr>
-            <th>Resource</th>
-            <th>Type</th>
-            <th>Size</th>
-            <th>Action</th>
+            <th><i class="fa-solid fa-file me-2"></i>Resource Name</th>
+            <th><i class="fa-solid fa-tag me-2"></i>Type</th>
+            <th><i class="fa-solid fa-server me-2"></i>Size</th>
+            <th class="text-end"><i class="fa-solid fa-bolt me-2"></i>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>PCB Defect Dataset (YOLO format)</td>
-            <td>Dataset</td>
-            <td>1.2 GB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="PCB Defect Dataset" data-code="PCB01">
-                <i class="fa-solid fa-download"></i> Get access code
+            <td data-label="Name">
+              <i class="fa-solid fa-database file-icon"></i>
+              PCB Defect Dataset (YOLO Format)
+            </td>
+            <td data-label="Type"><span class="type-badge badge-dataset">Dataset</span></td>
+            <td data-label="Size">1.2 GB</td>
+            <td data-label="Action" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#verificationModal" data-resource="PCB Dataset" data-code="PCB01">
+                <i class="fa-solid fa-download"></i> Get Access
               </button>
             </td>
           </tr>
           <tr>
-            <td>Halcon Operator Cheat Sheet (PDF)</td>
-            <td>Cheat Sheet</td>
-            <td>~6 MB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="Halcon Cheat Sheet" data-code="HAL01">
-                <i class="fa-solid fa-download"></i> Get access code
+            <td data-label="Name">
+              <i class="fa-solid fa-file-pdf file-icon"></i>
+              Halcon Operator Cheat Sheet (English Annotations)
+            </td>
+            <td data-label="Type"><span class="type-badge badge-doc">Cheat Sheet</span></td>
+            <td data-label="Size">6.5 MB</td>
+            <td data-label="Action" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#verificationModal" data-resource="Halcon Sheet" data-code="HAL01">
+                <i class="fa-solid fa-download"></i> Get Access
               </button>
             </td>
           </tr>
           <tr>
-            <td>OpenCV Project Template (logging/config/profiling)</td>
-            <td>Template</td>
-            <td>~2 MB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="OpenCV Project Template" data-code="OCV01">
-                <i class="fa-solid fa-download"></i> Get access code
+            <td data-label="Name">
+              <i class="fa-solid fa-code file-icon"></i>
+              OpenCV Industrial Project Template (C++)
+            </td>
+            <td data-label="Type"><span class="type-badge badge-code">Template</span></td>
+            <td data-label="Size">2.1 MB</td>
+            <td data-label="Action" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#verificationModal" data-resource="OpenCV Template" data-code="OCV01">
+                <i class="fa-solid fa-download"></i> Get Access
               </button>
             </td>
           </tr>
           <tr>
-            <td>Vision Project Acceptance Checklist</td>
-            <td>Checklist</td>
-            <td>~300 KB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="Acceptance Checklist" data-code="QA01">
-                <i class="fa-solid fa-download"></i> Get access code
+            <td data-label="Name">
+              <i class="fa-solid fa-clipboard-check file-icon"></i>
+              Vision Project Acceptance Checklist (Excel)
+            </td>
+            <td data-label="Type"><span class="type-badge badge-tool">Checklist</span></td>
+            <td data-label="Size">300 KB</td>
+            <td data-label="Action" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#verificationModal" data-resource="QA Checklist" data-code="QA01">
+                <i class="fa-solid fa-download"></i> Get Access
               </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+  </main>
 
-    <div class="modal fade" id="wechatModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Follow to get the resource</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Modal (Hacking Style) -->
+  <div class="modal fade" id="verificationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fa-solid fa-shield-halved"></i> ACCESS REQUIRED</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <p class="mb-3 text-start" style="border-left: 3px solid var(--primary-color); padding-left: 10px; font-size: 0.9rem;">
+            SYSTEM MESSAGE: To prevent bot abuse, please complete the verification steps below.
+          </p>
+          
+          <div class="qr-container">
+            <!-- Placeholder for QR or Link -->
+            <img src="../assets/images/qrcode.svg" class="img-fluid" style="width: 180px; filter: drop-shadow(0 0 5px rgba(0,240,255,0.5));" alt="QR Code" onerror="this.src='https://via.placeholder.com/180x180/000000/00f0ff?text=QR+Code'"/>
           </div>
-          <div class="modal-body text-center">
-            <p class="mb-2">To prevent abuse, please follow and reply <strong id="wechat-code">"PCB01"</strong> to receive the password.</p>
-            <img src="../assets/images/qrcode.svg" class="img-fluid w-50" alt="QR" />
-            <p class="mt-2 text-muted mb-0">You can also join the engineer community after following.</p>
+
+          <div class="mt-3">
+            <p class="mb-2">1. Scan the QR code to subscribe.</p>
+            <p class="mb-2">2. Reply with command <strong id="access-code" class="code-box">...</strong> to unlock.</p>
+          </div>
+          
+          <div class="mt-4 pt-3 border-top border-secondary">
+            <small class="text-muted"><i class="fa-solid fa-users me-1"></i> Joining grants access to all resources & community.</small>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <div id="footer-placeholder"></div>
+  <footer class="text-center py-4 border-top border-secondary" style="background: rgba(10,10,26,0.9);">
+    <small style="color: rgba(255,255,255,0.5);">&copy; 2024 Machine Vision Engineer. All Systems Operational.</small>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/main.js"></script>
   <script>
+    // ===== Particles Effect =====
+    function createParticles() {
+      const container = document.getElementById('particles-container');
+      const particleCount = 30;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+          position: absolute;
+          width: ${Math.random() * 3 + 1}px;
+          height: ${Math.random() * 3 + 1}px;
+          background: ${Math.random() > 0.5 ? '#00f0ff' : '#0066ff'};
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          border-radius: 50%;
+          opacity: ${Math.random() * 0.5 + 0.1};
+          animation: float ${Math.random() * 10 + 10}s infinite linear;
+        `;
+        container.appendChild(particle);
+      }
+      
+      const style = document.createElement('style');
+      style.textContent = `@keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-100vh); } }`;
+      document.head.appendChild(style);
+    }
+
+    // ===== Modal Logic =====
     (function () {
-      const modal = document.getElementById('wechatModal');
+      createParticles();
+      
+      const modal = document.getElementById('verificationModal');
       if (!modal) return;
 
       modal.addEventListener('show.bs.modal', (event) => {
         const btn = event.relatedTarget;
         if (!btn) return;
 
-        const code = btn.getAttribute('data-code') || 'PCB01';
-        const el = document.getElementById('wechat-code');
-        if (el) el.textContent = `"${code}"`;
-
-        const resource = btn.getAttribute('data-resource');
-        const title = modal.querySelector('.modal-title');
-        if (title && resource) title.textContent = `Follow to get: ${resource}`;
+        const code = btn.getAttribute('data-code') || 'ERROR';
+        
+        // Typewriter effect for the code
+        const el = document.getElementById('access-code');
+        el.textContent = '';
+        let i = 0;
+        const typeWriter = setInterval(() => {
+          if (i < code.length) {
+            el.textContent += code.charAt(i);
+            i++;
+          } else {
+            clearInterval(typeWriter);
+          }
+        }, 100);
       });
     })();
   </script>
 </body>
 </html>
+```

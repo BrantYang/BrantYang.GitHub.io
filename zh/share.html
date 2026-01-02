@@ -3,100 +3,449 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>机器视觉工程师 - 干货分享</title>
+  <title>机器视觉工程师 - 干货资源库</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ===== 全局样式变量 ===== */
+    :root {
+      --primary-color: #00f0ff;
+      --secondary-color: #0066ff;
+      --accent-color: #ff00ff;
+      --success-color: #00ff88;
+      --dark-bg: #0a0a1a;
+      --card-bg: rgba(15, 25, 50, 0.8);
+      --text-color: #e0e0e0;
+    }
+
+    /* ===== 基础设置 ===== */
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'YouYuan', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== 背景特效 ===== */
+    #particles-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+    }
+
+    .grid-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+    }
+
+    .scan-line {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      animation: scan 8s linear infinite;
+      opacity: 0.3;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+    /* ===== 导航栏 (简化版) ===== */
+    .navbar {
+      background: rgba(10, 10, 26, 0.95) !important;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+    }
+    .navbar-brand {
+      color: var(--primary-color) !important;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+    .nav-link {
+      color: var(--text-color) !important;
+      transition: color 0.3s;
+    }
+    .nav-link:hover { color: var(--primary-color) !important; }
+
+    /* ===== 页面头部 ===== */
+    .page-header {
+      padding: 120px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff, var(--primary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .page-subtitle {
+      color: var(--text-color);
+      opacity: 0.7;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== 资源数据表格 ===== */
+    .resource-container {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .resource-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tech-table th {
+      background: rgba(0, 240, 255, 0.05);
+      color: var(--primary-color);
+      padding: 20px;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .tech-table td {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .tech-table tr:hover td {
+      background: rgba(0, 240, 255, 0.03);
+      color: #fff;
+    }
+
+    .file-icon {
+      margin-right: 10px;
+      color: var(--primary-color);
+      width: 25px;
+      text-align: center;
+    }
+
+    /* ===== 类型徽章 ===== */
+    .type-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-dataset { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.3); }
+    .badge-doc { background: rgba(255, 0, 255, 0.1); color: #ff00ff; border: 1px solid rgba(255, 0, 255, 0.3); }
+    .badge-code { background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.3); }
+    .badge-tool { background: rgba(255, 165, 0, 0.1); color: #ffa500; border: 1px solid rgba(255, 165, 0, 0.3); }
+
+    /* ===== 操作按钮 ===== */
+    .btn-tech {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 102, 255, 0.1));
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-tech:hover {
+      background: var(--primary-color);
+      color: #000;
+      box-shadow: 0 0 15px var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    /* ===== 模态框 (Hacking Style) ===== */
+    .modal-content {
+      background: rgba(10, 10, 26, 0.95);
+      border: 1px solid var(--primary-color);
+      box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+      backdrop-filter: blur(20px);
+      color: var(--text-color);
+      border-radius: 10px;
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      background: rgba(0, 240, 255, 0.05);
+    }
+
+    .modal-title {
+      color: var(--primary-color);
+      font-family: 'Segoe UI', monospace;
+      letter-spacing: 1px;
+    }
+    
+    .modal-title i { margin-right: 10px; animation: blink 1s infinite; }
+
+    .btn-close {
+      filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    .qr-container {
+      position: relative;
+      display: inline-block;
+      padding: 10px;
+      border: 1px dashed var(--primary-color);
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .qr-container::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+      z-index: -1;
+    }
+
+    .code-box {
+      background: #000;
+      color: var(--success-color);
+      font-family: 'Consolas', monospace;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      font-size: 1.2rem;
+      margin: 0 5px;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ===== 响应式适配 ===== */
+    @media (max-width: 768px) {
+      .tech-table thead { display: none; }
+      .tech-table tr { 
+        display: block; 
+        margin-bottom: 20px; 
+        border: 1px solid rgba(0, 240, 255, 0.1);
+        border-radius: 10px;
+        padding: 15px;
+      }
+      .tech-table td { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        padding: 10px 0;
+        border: none;
+      }
+      .tech-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: var(--primary-color);
+        opacity: 0.7;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="navbar-placeholder"></div>
+  <!-- 视觉特效层 -->
+  <div class="scan-line"></div>
+  <div id="particles-container"></div>
+  <div class="grid-bg"></div>
 
+  <!-- 导航栏 -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><i class="fa-solid fa-eye me-2"></i>视觉工程师</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
+          <li class="nav-item"><a class="nav-link" href="solutions.html">行业案例</a></li>
+          <li class="nav-item"><a class="nav-link active" href="resources.html">干货分享</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 头部区域 -->
   <header class="page-header">
     <div class="container">
-      <h1 class="h2 mb-2"><i class="fa-solid fa-share-nodes text-primary"></i> 干货分享</h1>
-      <p class="text-muted mb-0">整理可复用的资料、模板与工具，帮助快速上手。</p>
+      <h1 class="page-title">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>干货资源库</span>
+      </h1>
+      <p class="page-subtitle">整理可复用的数据集、工程模板与验收工具，赋能你的视觉项目。</p>
     </div>
   </header>
 
-  <main class="container my-5">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
+  <!-- 主要内容 -->
+  <main class="container mb-5 flex-grow-1">
+    <div class="resource-container fade-in-up">
+      <table class="tech-table">
         <thead>
           <tr>
-            <th>资源名称</th>
-            <th>类型</th>
-            <th>大小</th>
-            <th>操作</th>
+            <th><i class="fa-solid fa-file me-2"></i>资源名称</th>
+            <th><i class="fa-solid fa-tag me-2"></i>类型</th>
+            <th><i class="fa-solid fa-server me-2"></i>大小</th>
+            <th class="text-end"><i class="fa-solid fa-bolt me-2"></i>操作</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>PCB 缺陷检测数据集 (YOLO 格式)</td>
-            <td>Dataset</td>
-            <td>1.2 GB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="PCB 缺陷检测数据集" data-code="PCB01">
-                <i class="fa-solid fa-download"></i> 获取下载码
+            <td data-label="资源名称">
+              <i class="fa-solid fa-database file-icon"></i>
+              PCB 缺陷检测数据集 (YOLO 格式)
+            </td>
+            <td data-label="类型"><span class="type-badge badge-dataset">Dataset</span></td>
+            <td data-label="大小">1.2 GB</td>
+            <td data-label="操作" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="PCB数据集" data-code="PCB01">
+                <i class="fa-solid fa-download"></i> 获取资源
               </button>
             </td>
           </tr>
           <tr>
-            <td>Halcon 算子速查表 (PDF)</td>
-            <td>Cheat Sheet</td>
-            <td>~6 MB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="Halcon 算子速查表" data-code="HAL01">
-                <i class="fa-solid fa-download"></i> 获取下载码
+            <td data-label="资源名称">
+              <i class="fa-solid fa-file-pdf file-icon"></i>
+              Halcon 算子速查表 (全中文注释)
+            </td>
+            <td data-label="类型"><span class="type-badge badge-doc">Cheat Sheet</span></td>
+            <td data-label="大小">6.5 MB</td>
+            <td data-label="操作" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="Halcon速查表" data-code="HAL01">
+                <i class="fa-solid fa-download"></i> 获取资源
               </button>
             </td>
           </tr>
           <tr>
-            <td>OpenCV 工程模板（日志/配置/性能统计）</td>
-            <td>Template</td>
-            <td>~2 MB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="OpenCV 工程模板" data-code="OCV01">
-                <i class="fa-solid fa-download"></i> 获取下载码
+            <td data-label="资源名称">
+              <i class="fa-solid fa-code file-icon"></i>
+              OpenCV 工业级工程模板 (C++)
+            </td>
+            <td data-label="类型"><span class="type-badge badge-code">Template</span></td>
+            <td data-label="大小">2.1 MB</td>
+            <td data-label="操作" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="OpenCV模板" data-code="OCV01">
+                <i class="fa-solid fa-download"></i> 获取资源
               </button>
             </td>
           </tr>
           <tr>
-            <td>视觉项目验收清单（精度/稳定性/节拍）</td>
-            <td>Checklist</td>
-            <td>~300 KB</td>
-            <td>
-              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="视觉项目验收清单" data-code="QA01">
-                <i class="fa-solid fa-download"></i> 获取下载码
+            <td data-label="资源名称">
+              <i class="fa-solid fa-clipboard-check file-icon"></i>
+              视觉项目验收标准清单 (Excel)
+            </td>
+            <td data-label="类型"><span class="type-badge badge-tool">Checklist</span></td>
+            <td data-label="大小">300 KB</td>
+            <td data-label="操作" class="text-end">
+              <button class="btn-tech" data-bs-toggle="modal" data-bs-target="#wechatModal" data-resource="项目验收清单" data-code="QA01">
+                <i class="fa-solid fa-download"></i> 获取资源
               </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+  </main>
 
-    <div class="modal fade" id="wechatModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">关注公众号获取免费资源</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- 科技感模态框 -->
+  <div class="modal fade" id="wechatModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fa-solid fa-shield-halved"></i> 权限验证 / ACCESS REQUIRED</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <p class="mb-3 text-start" style="border-left: 3px solid var(--primary-color); padding-left: 10px; font-size: 0.9rem;">
+            SYSTEM MESSAGE: 为了保护服务器资源并防止爬虫滥用，请执行以下验证步骤。
+          </p>
+          
+          <div class="qr-container">
+            <!-- 占位图片，请替换为实际二维码 -->
+            <img src="../assets/images/qrcode.svg" class="img-fluid" style="width: 180px; filter: drop-shadow(0 0 5px rgba(0,240,255,0.5));" alt="WeChat QR" onerror="this.src='https://via.placeholder.com/180x180/000000/00f0ff?text=QR+Code'"/>
           </div>
-          <div class="modal-body text-center">
-            <p class="mb-2">为了防止恶意爬虫，请关注公众号回复 <strong id="wechat-code">"PCB01"</strong> 获取下载密码。</p>
-            <img src="../assets/images/qrcode.svg" class="img-fluid w-50" alt="WeChat QR" />
-            <p class="mt-2 text-muted mb-0">关注后不仅能下载，还能加入视觉工程师交流群。</p>
+
+          <div class="mt-3">
+            <p class="mb-2">1. 扫描上方二维码关注公众号</p>
+            <p class="mb-2">2. 回复指令 <strong id="wechat-code" class="code-box">...</strong> 获取下载密码</p>
+          </div>
+          
+          <div class="mt-4 pt-3 border-top border-secondary">
+            <small class="text-muted"><i class="fa-solid fa-users me-1"></i> 验证后将自动解锁下载链接并加入技术交流群</small>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <div id="footer-placeholder"></div>
+  <footer class="text-center py-4 border-top border-secondary" style="background: rgba(10,10,26,0.9);">
+    <small style="color: rgba(255,255,255,0.5);">&copy; 2024 机器视觉工程师. All Systems Operational.</small>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/main.js"></script>
   <script>
+    // ===== 粒子特效 =====
+    function createParticles() {
+      const container = document.getElementById('particles-container');
+      const particleCount = 30;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+          position: absolute;
+          width: ${Math.random() * 3 + 1}px;
+          height: ${Math.random() * 3 + 1}px;
+          background: ${Math.random() > 0.5 ? '#00f0ff' : '#0066ff'};
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          border-radius: 50%;
+          opacity: ${Math.random() * 0.5 + 0.1};
+          animation: float ${Math.random() * 10 + 10}s infinite linear;
+        `;
+        container.appendChild(particle);
+      }
+      
+      const style = document.createElement('style');
+      style.textContent = `@keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-100vh); } }`;
+      document.head.appendChild(style);
+    }
+
+    // ===== 模态框逻辑 =====
     (function () {
+      createParticles();
+      
       const modal = document.getElementById('wechatModal');
       if (!modal) return;
 
@@ -104,13 +453,25 @@
         const btn = event.relatedTarget;
         if (!btn) return;
 
-        const code = btn.getAttribute('data-code') || 'PCB01';
-        const el = document.getElementById('wechat-code');
-        if (el) el.textContent = `"${code}"`;
-
+        const code = btn.getAttribute('data-code') || 'ERROR';
         const resource = btn.getAttribute('data-resource');
+        
+        // 打字机效果显示验证码
+        const el = document.getElementById('wechat-code');
+        el.textContent = '';
+        let i = 0;
+        const typeWriter = setInterval(() => {
+          if (i < code.length) {
+            el.textContent += code.charAt(i);
+            i++;
+          } else {
+            clearInterval(typeWriter);
+          }
+        }, 100);
+
+        // 更新模态框标题
         const title = modal.querySelector('.modal-title');
-        if (title && resource) title.textContent = `关注公众号获取：${resource}`;
+        // 可选：在这里动态更新标题
       });
     })();
   </script>

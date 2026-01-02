@@ -1,184 +1,2254 @@
+根据中文版案例详情页，创建英文版 `case-detail-en.html`：
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vision Engineer - Case Detail</title>
+  <title>Machine Vision Engineer - Case Study</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ===== Global Tech Style ===== */
+    :root {
+      --primary-color: #00f0ff;
+      --secondary-color: #0066ff;
+      --accent-color: #ff00ff;
+      --dark-bg: #0a0a1a;
+      --card-bg: rgba(15, 25, 50, 0.8);
+      --text-color: #e0e0e0;
+      --glow-color: rgba(0, 240, 255, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ===== Dynamic Particle Background ===== */
+    #particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      animation: float 15s infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* ===== Grid Background ===== */
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+    }
+
+    /* ===== High-Tech Navbar ===== */
+    .navbar {
+      background: rgba(10, 10, 26, 0.95) !important;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 0;
+      transition: all 0.3s ease;
+      min-height: 80px;
+    }
+
+    .navbar-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px;
+      height: 80px;
+    }
+
+    .navbar-brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .navbar-brand i {
+      color: var(--primary-color);
+      -webkit-text-fill-color: var(--primary-color);
+      font-size: 2rem;
+      filter: drop-shadow(0 0 15px var(--primary-color));
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { filter: drop-shadow(0 0 15px var(--primary-color)); }
+      50% { filter: drop-shadow(0 0 25px var(--primary-color)); }
+    }
+
+    /* ===== Navigation Menu ===== */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-color) !important;
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.05), rgba(0, 102, 255, 0.05));
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::before { left: 100%; }
+    .nav-link:hover::after { width: 100%; }
+
+    .nav-link:hover {
+      color: var(--primary-color) !important;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 102, 255, 0.1));
+      border-color: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 10px 30px rgba(0, 240, 255, 0.2),
+        0 0 20px rgba(0, 240, 255, 0.1);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 5px currentColor);
+    }
+
+    .nav-link:hover i {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 10px var(--primary-color));
+    }
+
+    .nav-link.active {
+      color: var(--primary-color) !important;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 102, 255, 0.15));
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .nav-link.active::after { width: 100%; }
+
+    .nav-link .corner {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--primary-color);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-link .corner-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+    .nav-link .corner-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+    .nav-link .corner-bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+    .nav-link .corner-br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+
+    .nav-link:hover .corner { opacity: 1; }
+
+    /* ===== Language Switcher ===== */
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 15px;
+      padding: 8px 16px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 20px;
+    }
+
+    .lang-switcher a {
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .lang-switcher a:hover,
+    .lang-switcher a.active {
+      color: var(--primary-color);
+      background: rgba(0, 240, 255, 0.2);
+    }
+
+    .lang-switcher span {
+      color: rgba(0, 240, 255, 0.5);
+    }
+
+    /* ===== Mobile Menu Button ===== */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn.active span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+
+    .mobile-menu-btn.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* ===== Page Header ===== */
+    .page-header {
+      padding: 140px 0 60px;
+      position: relative;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.08), transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      z-index: -1;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-title i {
+      color: var(--primary-color);
+      -webkit-text-fill-color: var(--primary-color);
+      filter: drop-shadow(0 0 20px var(--primary-color));
+    }
+
+    .header-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    /* ===== Back Button ===== */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: transparent;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 30px;
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(0, 240, 255, 0.1);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      transform: translateX(-5px);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    .back-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .back-btn:hover i {
+      transform: translateX(-5px);
+    }
+
+    /* ===== Main Content Area ===== */
+    .main-content {
+      padding: 40px 0 100px;
+      position: relative;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 992px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== Content Cards ===== */
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover {
+      border-color: rgba(0, 240, 255, 0.3);
+      box-shadow: 0 15px 50px rgba(0, 240, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .content-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-title i {
+      color: var(--primary-color);
+      filter: drop-shadow(0 0 10px var(--primary-color));
+    }
+
+    .card-title .title-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.3), transparent);
+      margin-left: 10px;
+    }
+
+    /* ===== Overview Text ===== */
+    .overview-text {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--text-color);
+      opacity: 0.9;
+    }
+
+    /* ===== List Styles ===== */
+    .tech-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tech-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .tech-list li:last-child {
+      border-bottom: none;
+    }
+
+    .tech-list li:hover {
+      padding-left: 10px;
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.05), transparent);
+    }
+
+    .list-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .list-icon.challenge {
+      background: linear-gradient(135deg, rgba(255, 100, 100, 0.2), rgba(255, 50, 50, 0.1));
+      border: 1px solid rgba(255, 100, 100, 0.3);
+    }
+
+    .list-icon.challenge i {
+      color: #ff6b6b;
+      font-size: 0.8rem;
+    }
+
+    .list-icon.approach {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 102, 255, 0.1));
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .list-icon.approach i {
+      color: var(--primary-color);
+      font-size: 0.8rem;
+    }
+
+    .list-icon.result {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    .list-icon.result i {
+      color: #00ff88;
+      font-size: 0.8rem;
+    }
+
+    .list-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-color);
+    }
+
+    /* ===== Sidebar Card ===== */
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sidebar-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--secondary-color));
+    }
+
+    /* ===== Case Image ===== */
+    .case-image-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .case-image-wrapper:hover .case-image {
+      transform: scale(1.05);
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(10, 10, 26, 0.9) 100%);
+      pointer-events: none;
+    }
+
+    .image-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+    }
+
+    /* ===== Sidebar Content ===== */
+    .sidebar-content {
+      padding: 30px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 25px;
+    }
+
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-title i {
+      color: var(--primary-color);
+      filter: drop-shadow(0 0 8px var(--primary-color));
+    }
+
+    /* ===== Tech Tags ===== */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tech-tag {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 102, 255, 0.1));
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: var(--primary-color);
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .tech-tag:hover {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(0, 102, 255, 0.2));
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Domain Tags ===== */
+    .domain-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .domain-tag {
+      background: transparent;
+      border: 1px solid rgba(255, 0, 255, 0.3);
+      color: var(--accent-color);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .domain-tag:hover {
+      background: rgba(255, 0, 255, 0.1);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+    }
+
+    /* ===== Divider ===== */
+    .sidebar-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+      margin: 20px 0;
+    }
+
+    /* ===== CTA Box ===== */
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(255, 0, 255, 0.05));
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+      animation: ctaGlow 10s linear infinite;
+    }
+
+    @keyframes ctaGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .cta-text {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.6);
+      color: #000;
+    }
+
+    /* ===== Related Cases ===== */
+    .related-cases {
+      margin-top: 30px;
+    }
+
+    .related-case-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(0, 240, 255, 0.03);
+      border: 1px solid rgba(0, 240, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .related-case-item:hover {
+      border-color: var(--primary-color);
+      background: rgba(0, 240, 255, 0.08);
+      transform: translateX(5px);
+    }
+
+    .related-case-icon {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 102, 255, 0.1));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .related-case-icon i {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+
+    .related-case-info h6 {
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .related-case-info span {
+      color: var(--text-color);
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    /* ===== Scan Line ===== */
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      animation: scan 8s linear infinite;
+      opacity: 0.3;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+
+    /* ===== Cursor Glow ===== */
+    .cursor-glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.15), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: rgba(5, 5, 15, 0.95);
+      border-top: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 60px 0 30px;
+      position: relative;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand h3 {
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+
+    .footer-brand p {
+      color: var(--text-color);
+      opacity: 0.7;
+      max-width: 300px;
+    }
+
+    .footer-links h4 {
+      color: #fff;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color);
+      opacity: 1;
+      padding-left: 5px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    继续生成剩余的代码：
+
+```html
+    .social-links a {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--primary-color);
+      color: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      opacity: 0.6;
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 1200px) {
+      .nav-link {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(10, 10, 26, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 20px;
+        gap: 10px;
+        border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        transform: translateY(-150%);
+        opacity: 0;
+        transition: all 0.4s ease;
+        z-index: 999;
+      }
+
+      .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .nav-link {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 30px;
+        font-size: 1.1rem;
+      }
+
+      .lang-switcher {
+        margin-left: 0;
+        margin-top: 10px;
+        justify-content: center;
+      }
+
+      .header-title {
+        font-size: 2rem;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        padding: 120px 0 40px;
+      }
+
+      .header-content {
+        flex-direction: column;
+      }
+
+      .header-title {
+        font-size: 1.6rem;
+      }
+
+      .content-card {
+        padding: 20px;
+      }
+
+      .sidebar-content {
+        padding: 20px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-brand p {
+        max-width: 100%;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    /* ===== Loading Animation ===== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* ===== Scrollbar Styles ===== */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(10, 10, 26, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+    }
+  </style>
 </head>
 <body>
-  <div id="navbar-placeholder"></div>
+  <!-- Scan Line Effect -->
+  <div class="scan-line"></div>
+  
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
 
+  <!-- Particle Background -->
+  <div id="particles-container"></div>
+  
+  <!-- Grid Background -->
+  <div class="grid-bg"></div>
+
+  <!-- High-Tech Navbar -->
+  <nav class="navbar fixed-top">
+    <div class="navbar-container">
+      <a class="navbar-brand" href="index-en.html">
+        <i class="fa-solid fa-eye"></i>
+        <span>Vision Engineer</span>
+      </a>
+      
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Navigation Menu -->
+      <ul class="nav-menu" id="navMenu">
+        <li class="nav-item">
+          <a class="nav-link" href="index-en.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-home"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="solutions-en.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-lightbulb"></i>
+            <span>Case Studies</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tools-en.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-tools"></i>
+            <span>Toolbox</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="blog-en.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-blog"></i>
+            <span>Tech Blog</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about-en.html">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <i class="fa-solid fa-user"></i>
+            <span>About</span>
+          </a>
+        </li>
+        <!-- Language Switcher -->
+        <li class="nav-item">
+          <div class="lang-switcher">
+            <a href="case-detail.html">中文</a>
+            <span>|</span>
+            <a href="case-detail-en.html" class="active">EN</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
   <header class="page-header">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="header-content">
         <div>
-          <h1 class="h2 mb-1"><i class="fa-solid fa-file-lines text-primary"></i> <span id="case-title">Case Detail</span></h1>
-          <p class="text-muted mb-0" id="case-subtitle">—</p>
+          <h1 class="header-title">
+            <i class="fa-solid fa-file-lines"></i>
+            <span id="case-title">Case Study Details</span>
+          </h1>
+          <p class="header-subtitle" id="case-subtitle">—</p>
         </div>
-        <a class="btn btn-outline-secondary" href="solutions.html"><i class="fa-solid fa-arrow-left"></i> Back to Solutions</a>
+        <a class="back-btn" href="solutions-en.html">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Back to Case Studies</span>
+        </a>
       </div>
     </div>
   </header>
 
-  <main class="container my-5">
-    <div class="row g-4">
-      <div class="col-lg-7">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Overview</h5>
-            <p class="text-muted mb-0" id="case-overview">—</p>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="content-grid">
+        <!-- Left Content Area -->
+        <div class="left-content">
+          <!-- Project Overview -->
+          <div class="content-card fade-in-up">
+            <h5 class="card-title">
+              <i class="fa-solid fa-lightbulb"></i>
+              <span>Project Overview</span>
+              <span class="title-line"></span>
+            </h5>
+            <p class="overview-text" id="case-overview">—</p>
+          </div>
+
+          <!-- Challenges -->
+          <div class="content-card fade-in-up" style="animation-delay: 0.1s;">
+            <h5 class="card-title">
+              <i class="fa-solid fa-exclamation-triangle"></i>
+              <span>Technical Challenges</span>
+              <span class="title-line"></span>
+            </h5>
+            <ul class="tech-list" id="case-challenges"></ul>
+          </div>
+
+          <!-- Solution & Implementation -->
+          <div class="content-card fade-in-up" style="animation-delay: 0.2s;">
+            <h5 class="card-title">
+              <i class="fa-solid fa-cogs"></i>
+              <span>Solution & Implementation</span>
+              <span class="title-line"></span>
+            </h5>
+            <ul class="tech-list" id="case-approach"></ul>
+          </div>
+
+          <!-- Results -->
+          <div class="content-card fade-in-up" style="animation-delay: 0.3s;">
+            <h5 class="card-title">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Results & Impact</span>
+              <span class="title-line"></span>
+            </h5>
+            <ul class="tech-list" id="case-results"></ul>
           </div>
         </div>
 
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Challenges</h5>
-            <ul class="mb-0" id="case-challenges"></ul>
-          </div>
-        </div>
-
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Approach</h5>
-            <ul class="mb-0" id="case-approach"></ul>
-          </div>
-        </div>
-
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Results</h5>
-            <ul class="mb-0" id="case-results"></ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-5">
-        <div class="card shadow-sm">
-          <img id="case-image" src="../assets/images/solutions/wafer.svg" class="card-img-top" alt="case" />
-          <div class="card-body">
-            <h5 class="card-title">Tech Keywords</h5>
-            <div class="d-flex flex-wrap gap-2" id="case-tags"></div>
-
-            <hr />
-
-            <h6 class="text-muted">Domains</h6>
-            <div class="d-flex flex-wrap gap-2" id="case-domains"></div>
-
-            <hr />
-
-            <div class="alert alert-light border mb-0">
-              Want to apply a similar approach?
-              <a href="about.html">Contact me</a>
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+          <!-- Case Info Card -->
+          <div class="sidebar-card fade-in-up" style="animation-delay: 0.4s;">
+            <div class="case-image-wrapper">
+              <img id="case-image" src="../assets/images/solutions/wafer.svg" class="case-image" alt="Case Image" />
+              <div class="image-overlay"></div>
+              <span class="image-badge">Real Case</span>
             </div>
+            
+            <div class="sidebar-content">
+              <!-- Tech Keywords -->
+              <div class="sidebar-section">
+                <h6 class="sidebar-title">
+                  <i class="fa-solid fa-tags"></i>
+                  <span>Tech Keywords</span>
+                </h6>
+                <div class="tech-tags" id="case-tags"></div>
+              </div>
+
+              <div class="sidebar-divider"></div>
+
+              <!-- Industries -->
+              <div class="sidebar-section">
+                <h6 class="sidebar-title">
+                  <i class="fa-solid fa-industry"></i>
+                  <span>Industries</span>
+                </h6>
+                <div class="domain-tags" id="case-domains"></div>
+              </div>
+
+              <div class="sidebar-divider"></div>
+
+              <!-- CTA Call to Action -->
+              <div class="cta-box">
+                <p class="cta-text">
+                  <i class="fa-solid fa-rocket"></i>
+                  Want to apply this solution to your production line?
+                </p>
+                <a class="cta-btn" href="about-en.html">
+                  <i class="fa-solid fa-envelope"></i>
+                  <span>Contact Me</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related Cases -->
+          <div class="related-cases fade-in-up" style="animation-delay: 0.5s;">
+            <h6 class="sidebar-title" style="margin-bottom: 15px;">
+              <i class="fa-solid fa-link"></i>
+              <span>Related Cases</span>
+            </h6>
+            <a href="case-detail-en.html?id=threec" class="related-case-item">
+              <div class="related-case-icon">
+                <i class="fa-solid fa-mobile-alt"></i>
+              </div>
+              <div class="related-case-info">
+                <h6>3C Surface Defect Detection</h6>
+                <span>Detection under complex reflective backgrounds</span>
+              </div>
+            </a>
+            <a href="case-detail-en.html?id=assembly" class="related-case-item">
+              <div class="related-case-icon">
+                <i class="fa-solid fa-car"></i>
+              </div>
+              <div class="related-case-info">
+                <h6>Assembly Positioning & Measurement</h6>
+                <span>High-precision positioning & cycle time optimization</span>
+              </div>
+            </a>
+            <a href="case-detail-en.html?id=battery" class="related-case-item">
+              <div class="related-case-icon">
+                <i class="fa-solid fa-battery-full"></i>
+              </div>
+              <div class="related-case-info">
+                <h6>Battery/Module Inspection</h6>
+                <span>Integrated inspection solution</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <div id="footer-placeholder"></div>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3><i class="fa-solid fa-eye me-2"></i>Vision Engineer</h3>
+          <p>Focused on machine vision technology sharing, empowering intelligent manufacturing industry upgrade.</p>
+          <div class="social-links">
+            <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="solutions-en.html">Case Studies</a></li>
+            <li><a href="tools-en.html">Toolbox</a></li>
+            <li><a href="blog-en.html">Tech Blog</a></li>
+            <li><a href="about-en.html">About Me</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Technologies</h4>
+          <ul>
+            <li><a href="#">OpenCV</a></li>
+            <li><a href="#">Deep Learning</a></li>
+            <li><a href="#">Defect Detection</a></li>
+            <li><a href="#">3D Vision</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Industries</h4>
+          <ul>
+            <li><a href="#">Consumer Electronics</a></li>
+            <li><a href="#">Automotive</a></li>
+            <li><a href="#">Semiconductor</a></li>
+            <li><a href="#">New Energy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Machine Vision Engineer. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/main.js"></script>
   <script>
-    (function () {
-      const cases = {
-        wafer: {
-          title: 'Wafer defect inspection',
-          subtitle: 'Reliable detection with low false positives',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: 'Semiconductor surface inspection focused on small defects under complex textures, with deployment and maintainability in mind.',
-          challenges: ['Tiny and diverse defect patterns', 'Textured/noisy backgrounds', 'High FP cost requires confidence/verification'],
-          approach: ['Data loop: collect → label → validate → hard-example mining', 'Model training & deployment (YOLO/segmentation patterns)', 'Hybrid with rules: ROI constraints, geometry checks, confidence gating'],
-          results: ['Stable detection on small scratches/particles', 'Reduced false positives via post-checks', 'Reusable pipeline for similar appearance inspections'],
-          tags: ['YOLO', 'OpenCV', 'Deployment', 'Hard examples'],
-          domains: ['Semiconductor']
-        },
-        threec: {
-          title: '3C surface inspection',
-          subtitle: 'Robust under specular reflections',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: 'Inspection for reflective 3C parts using imaging + algorithm co-design for stability.',
-          challenges: ['Reflection hotspots & shadows shift a lot', 'Process drift and variation', 'Cycle time and maintenance costs'],
-          approach: ['Imaging strategy: angle/polarization/exposure', 'Hybrid rules + DL', 'Engineering: parameterization and diagnostics'],
-          results: ['Stable performance under drift', 'Lower manual re-check load', 'Reusable for similar cosmetic inspection tasks'],
-          tags: ['Imaging', 'Hybrid AI', 'Diagnostics'],
-          domains: ['3C']
-        },
-        assembly: {
-          title: 'Assembly positioning & metrology',
-          subtitle: 'Accuracy, stability, and takt time',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: 'Positioning and measurement for assembly stations emphasizing accuracy and traceability.',
-          challenges: ['Tight tolerances and accuracy targets', 'Vibration/fixture/lighting disturbances', 'Traceable measurement chain'],
-          approach: ['Halcon/OpenCV: sub-pixel localization & fitting', 'Calibration workflow for camera/lens/fixture', 'Engineering: logs, thresholds, traceability outputs'],
-          results: ['Meets positioning accuracy requirements', 'Traceable measurements', 'Compatible with station takt time'],
-          tags: ['Halcon', 'Sub-pixel', 'Calibration', 'Metrology'],
-          domains: ['Automotive']
-        },
-        battery: {
-          title: 'Battery/module inspection',
-          subtitle: 'Appearance + dimension + marking in one flow',
-          image: '../assets/images/solutions/wafer.svg',
-          overview: 'Unified system for appearance checks, metrology, and marking/OCR to reduce station split and integration complexity.',
-          challenges: ['Many checks and complex flows', 'Consistency across cameras & lighting', 'Integration and maintainability'],
-          approach: ['Architecture: multi-camera multi-task scheduling', 'Algorithms: defects + geometry + OCR/decoding', 'Engineering: visualization and fast failure triage'],
-          results: ['Higher overall efficiency with fewer splits', 'Lower maintenance cost', 'Faster root-cause localization'],
-          tags: ['Multi-task', 'OCR', 'Integration'],
-          domains: ['New Energy']
+    // ===== Case Data (English Version) =====
+    const cases = {
+      wafer: {
+        title: 'Wafer Surface Defect Detection',
+        subtitle: 'Stable detection of micro scratches/particles with false positive control',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: 'Surface defect detection for semiconductor production lines, requiring stable detection of micro defects under complex textures and noise backgrounds while meeting cycle time and maintainability requirements. This project combines deep learning with traditional algorithms to achieve high-precision, low false-positive intelligent detection systems.',
+        challenges: [
+          'Small defect scale with diverse morphologies, traditional threshold methods are inadequate',
+          'Complex background textures with high noise interference, requiring high stability',
+          'High cost of false positives, requiring explainable review mechanisms and traceability'
+        ],
+        approach: [
+          'Data closed-loop: Establish collection-annotation-validation process with continuous hard case mining for model optimization',
+          'Model training & deployment: YOLO/segmentation algorithms + TensorRT industrial inference acceleration',
+          'Integration with traditional algorithms: ROI region constraints, geometric rule filtering, result confidence evaluation'
+        ],
+        results: [
+          'Stable detection of micro scratches/particles, detection rate improved to over 98%',
+          'False positive rate reduced by 60%, further optimized through rules/secondary judgment',
+          'Standardized deployment process, quickly replicable to similar surface inspection stations'
+        ],
+        tags: ['YOLO', 'OpenCV', 'TensorRT', 'Industrial Deployment', 'Hard Case Mining'],
+        domains: ['Semiconductor']
+      },
+      threec: {
+        title: '3C Surface Defect Detection',
+        subtitle: 'Detection and false positive control under complex reflective backgrounds',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: 'For high-reflective/high-texture 3C surface parts, establish stable detection and quality judgment strategies. By combining optical optimization with AI algorithms, solve detection challenges in complex scenarios such as reflection and shadows.',
+        challenges: [
+          'High reflection causing unstable imaging with varying bright spots/shadows',
+          'Sample differences and process fluctuations require high model generalization',
+          'Strict cycle time requirements, deployment and maintenance costs need control'
+        ],
+        approach: [
+          'Optical and imaging synergy: Optimize shooting angle/polarized light/exposure strategy',
+          'Algorithm fusion: Traditional rules + deep learning dual verification',
+          'Engineering: Parameterized configuration and visual diagnostic tools'
+        ],
+        results: [
+          'Maintain stable results under process fluctuations, accuracy reaches 95%+',
+          'Reduce manual review pressure, efficiency improved by 40%',
+          'Solution can be quickly replicated to similar surface inspection tasks'
+        ],
+        tags: ['Imaging Optimization', 'Traditional+AI', 'Diagnostic Tools', 'Halcon'],
+        domains: ['Consumer Electronics']
+      },
+      assembly: {
+        title: 'Assembly Positioning & Measurement',
+        subtitle: 'High-precision positioning, dimensional measurement and cycle time optimization',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: 'Positioning and measurement tasks for assembly stations, emphasizing precision, stability and cycle time. Through sub-pixel positioning and calibration technology, achieve high-precision measurement and fast response.',
+        challenges: [
+          'Tight tolerances, positioning accuracy requirements reaching ±0.05mm level',
+          'Disturbances from fixtures/vibration/lighting affecting measurement stability',
+          'Measurement chain requires traceability to meet quality system requirements'
+        ],
+        approach: [
+          'Halcon/OpenCV: Sub-pixel edge detection and geometric fitting algorithms',
+          'Calibration process: Complete camera-lens-fixture calibration and error compensation',
+          'Engineering: Log recording, threshold management, result traceability system'
+        ],
+        results: [
+          'Meet assembly positioning accuracy requirements, repeatability ±0.03mm',
+          'Measurement results traceable, compliant with ISO quality system',
+          'Compatible with production line cycle time, single measurement <2 seconds'
+        ],
+        tags: ['Halcon', 'Sub-pixel', 'Calibration', 'Measurement', 'OpenCV'],
+        domains: ['Automotive']
+      },
+      battery: {
+        title: 'Battery/Module Inspection',
+        subtitle: 'Integrated inspection of surface + dimensions + identification',
+        image: '../assets/images/solutions/wafer.svg',
+        overview: 'In new energy production lines, integrate surface inspection, dimensional measurement and barcode reading to reduce equipment and station count. Through multi-task unified scheduling, improve overall efficiency.',
+        challenges: [
+          'Multiple inspection items with complex processes, requiring multi-camera coordination',
+          'Consistency of different cameras/light sources difficult to guarantee',
+          'High system integration and maintenance costs, need cost reduction and efficiency improvement'
+        ],
+        approach: [
+          'Architecture design: Multi-camera/multi-task unified scheduling and synchronous triggering',
+          'Algorithm integration: Surface defects + geometric measurement + OCR/barcode reading integration',
+          'Engineering optimization: Anomaly visualization and quick positioning diagnostic tools'
+        ],
+        results: [
+          'Reduce station splitting, overall efficiency improved by 30%',
+          'Lower maintenance costs with unified management platform',
+          'Improve production line anomaly positioning speed, fault response time reduced by 50%'
+        ],
+        tags: ['Multi-task', 'OCR', 'System Integration', 'PaddleOCR'],
+        domains: ['New Energy']
+      }
+    };
+
+    // ===== Get URL Parameters =====
+    const params = new URLSearchParams(window.location.search);
+    const caseId = params.get('id') || 'wafer';
+    const caseData = cases[caseId] || cases.wafer;
+
+    // ===== Set Text Content =====
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    // ===== Set List Content =====
+    function setList(id, items, iconClass, iconName) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '';
+      
+      items.forEach((text) => {
+        const li = document.createElement('li');
+        
+        const iconDiv = document.createElement('div');
+        iconDiv.className = `list-icon ${iconClass}`;
+        iconDiv.innerHTML = `<i class="fa-solid ${iconName}"></i>`;
+        
+        const textDiv = document.createElement('div');
+        textDiv.className = 'list-text';
+        textDiv.textContent = text;
+        
+        li.appendChild(iconDiv);
+        li.appendChild(textDiv);
+        el.appendChild(li);
+      });
+    }
+
+    // ===== Set Tags =====
+    function setTags(id, items, className) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '';
+      
+      items.forEach((text) => {
+        const span = document.createElement('span');
+        span.className = className;
+        span.textContent = text;
+        el.appendChild(span);
+      });
+    }
+
+    // ===== Populate Page Content =====
+    setText('case-title', caseData.title);
+    setText('case-subtitle', caseData.subtitle);
+    setText('case-overview', caseData.overview);
+    
+    setList('case-challenges', caseData.challenges, 'challenge', 'fa-exclamation-circle');
+    setList('case-approach', caseData.approach, 'approach', 'fa-check-circle');
+    setList('case-results', caseData.results, 'result', 'fa-trophy');
+
+    const img = document.getElementById('case-image');
+    if (img) img.src = caseData.image;
+
+    setTags('case-tags', caseData.tags, 'tech-tag');
+    setTags('case-domains', caseData.domains, 'domain-tag');
+
+    document.title = `Machine Vision Engineer - ${caseData.title}`;
+
+    // ===== Update Related Cases Based on Current Case =====
+    function updateRelatedCases() {
+      const relatedContainer = document.querySelector('.related-cases');
+      if (!relatedContainer) return;
+
+      const allCaseIds = Object.keys(cases);
+      const otherCases = allCaseIds.filter(id => id !== caseId);
+      
+      const relatedCasesHTML = otherCases.slice(0, 3).map(id => {
+        const c = cases[id];
+        const icons = {
+          wafer: 'fa-microchip',
+          threec: 'fa-mobile-alt',
+          assembly: 'fa-car',
+          battery: 'fa-battery-full'
+        };
+        
+        return `
+          <a href="case-detail-en.html?id=${id}" class="related-case-item">
+            <div class="related-case-icon">
+              <i class="fa-solid ${icons[id] || 'fa-folder'}"></i>
+            </div>
+            <div class="related-case-info">
+              <h6>${c.title}</h6>
+              <span>${c.subtitle.substring(0, 50)}...</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+
+      const titleHTML = `
+        <h6 class="sidebar-title" style="margin-bottom: 15px;">
+          <i class="fa-solid fa-link"></i>
+          <span>Related Cases</span>
+        </h6>
+      `;
+
+      relatedContainer.innerHTML = titleHTML + relatedCasesHTML;
+    }
+
+    updateRelatedCases();
+
+    // ===== Create Particle Effect =====
+    function createParticles() {
+      const container = document.getElementById('particles-container');
+      const particleCount = 40;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        
+        const size = Math.random() * 3 + 1;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        const colors = ['#00f0ff', '#0066ff', '#ff00ff', '#00ff88'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        container.appendChild(particle);
+      }
+    }
+
+    // ===== Cursor Glow Effect =====
+    document.addEventListener('mousemove', (e) => {
+      const glow = document.getElementById('cursorGlow');
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    // ===== Navbar Scroll Effect =====
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(10, 10, 26, 0.98)';
+        navbar.style.boxShadow = '0 5px 30px rgba(0, 240, 255, 0.1)';
+      } else {
+        navbar.style.background = 'rgba(10, 10, 26, 0.95)';
+        navbar.style.boxShadow = 'none';
+      }
+    });
+
+    // ===== Mobile Menu Toggle =====
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== Card Hover Effects =====
+    function initCardEffects() {
+      const cards = document.querySelectorAll('.content-card, .sidebar-card');
+      
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+        });
+      });
+    }
+
+    // ===== Tag Hover Effects =====
+    function initTagEffects() {
+      const tags = document.querySelectorAll('.tech-tag, .domain-tag');
+      
+      tags.forEach(tag => {
+        tag.addEventListener('mouseenter', () => {
+          tag.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+        
+        tag.addEventListener('mouseleave', () => {
+          tag.style.transform = 'translateY(0) scale(1)';
+        });
+      });
+    }
+
+    // ===== List Item Animation =====
+    function animateListItems() {
+      const listItems = document.querySelectorAll('.tech-list li');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateX(0)';
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      listItems.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+        item.style.transition = 'all 0.5s ease';
+        observer.observe(item);
+      });
+    }
+
+    // ===== Related Case Hover Effects =====
+    function initRelatedCaseEffects() {
+      const items = document.querySelectorAll('.related-case-item');
+      
+      items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          const icon = item.querySelector('.related-case-icon i');
+          if (icon) {
+            icon.style.transform = 'scale(1.2) rotate(10deg)';
+            icon.style.transition = 'transform 0.3s ease';
+          }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          const icon = item.querySelector('.related-case-icon i');
+          if (icon) {
+            icon.style.transform = 'scale(1) rotate(0deg)';
+          }
+        });
+      });
+    }
+
+    // ===== Image Hover Effects =====
+    function initImageEffects() {
+      const imageWrapper = document.querySelector('.case-image-wrapper');
+      const image = document.querySelector('.case-image');
+      
+      if (imageWrapper && image) {
+        imageWrapper.addEventListener('mouseenter', () => {
+          image.style.transform = 'scale(1.1)';
+        });
+        
+        imageWrapper.addEventListener('mouseleave', () => {
+          image.style.transform = 'scale(1)';
+        });
+      }
+    }
+
+// ===== Social Link Hover Effects =====
+function initSocialEffects() {
+      const socialLinks = document.querySelectorAll('.social-links a');
+      
+      socialLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          link.style.transform = 'translateY(-5px) rotate(10deg)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          link.style.transform = 'translateY(0) rotate(0deg)';
+        });
+      });
+    }
+
+    // ===== Footer Link Hover Effects =====
+    function initFooterEffects() {
+      const footerLinks = document.querySelectorAll('.footer-links a');
+      
+      footerLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          link.style.paddingLeft = '10px';
+          link.style.color = 'var(--primary-color)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          link.style.paddingLeft = '0';
+          link.style.color = '';
+        });
+      });
+    }
+
+    // ===== CTA Button Ripple Effect =====
+    function initRippleEffect() {
+      const ctaBtn = document.querySelector('.cta-btn');
+      
+      if (ctaBtn) {
+        ctaBtn.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+          `;
+          
+          this.style.position = 'relative';
+          this.style.overflow = 'hidden';
+          this.appendChild(ripple);
+          
+          setTimeout(() => ripple.remove(), 600);
+        });
+      }
+
+      // Add ripple animation keyframes
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes ripple {
+          to {
+            transform: scale(4);
+            opacity: 0;
+          }
         }
-      };
+      `;
+      document.head.appendChild(style);
+    }
 
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id') || 'wafer';
-      const data = cases[id] || cases.wafer;
-
-      const setText = (id, value) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value;
-      };
-
-      const setList = (id, items) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.innerHTML = '';
-        items.forEach((t) => {
-          const li = document.createElement('li');
-          li.textContent = t;
-          el.appendChild(li);
+    // ===== Back Button Effect =====
+    function initBackButtonEffect() {
+      const backBtn = document.querySelector('.back-btn');
+      
+      if (backBtn) {
+        backBtn.addEventListener('mouseenter', () => {
+          backBtn.style.transform = 'translateX(-10px)';
         });
-      };
-
-      const setBadges = (id, items, cls) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.innerHTML = '';
-        items.forEach((t) => {
-          const span = document.createElement('span');
-          span.className = cls;
-          span.textContent = t;
-          el.appendChild(span);
+        
+        backBtn.addEventListener('mouseleave', () => {
+          backBtn.style.transform = 'translateX(0)';
         });
-      };
+      }
+    }
 
-      setText('case-title', data.title);
-      setText('case-subtitle', data.subtitle);
-      setText('case-overview', data.overview);
-      setList('case-challenges', data.challenges);
-      setList('case-approach', data.approach);
-      setList('case-results', data.results);
+    // ===== Scroll Reveal Animation =====
+    function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.content-card, .sidebar-card, .related-cases');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
 
-      const img = document.getElementById('case-image');
-      if (img) img.src = data.image;
+      revealElements.forEach(el => {
+        if (!el.classList.contains('fade-in-up')) {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(30px)';
+          el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+          observer.observe(el);
+        }
+      });
+    }
 
-      setBadges('case-tags', data.tags, 'badge text-bg-primary');
-      setBadges('case-domains', data.domains, 'badge rounded-pill text-bg-dark');
+    // ===== Smooth Scroll =====
+    function initSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    }
 
-      document.title = `Vision Engineer - ${data.title}`;
-    })();
+    // ===== Keyboard Navigation Support =====
+    function initKeyboardNav() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          mobileMenuBtn.classList.remove('active');
+          navMenu.classList.remove('active');
+        }
+      });
+    }
+
+    // ===== List Icon Hover Rotation Effect =====
+    function initListIconEffects() {
+      const listItems = document.querySelectorAll('.tech-list li');
+      
+      listItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          const icon = item.querySelector('.list-icon i');
+          if (icon) {
+            icon.style.transform = 'rotate(360deg)';
+            icon.style.transition = 'transform 0.5s ease';
+          }
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          const icon = item.querySelector('.list-icon i');
+          if (icon) {
+            icon.style.transform = 'rotate(0deg)';
+          }
+        });
+      });
+    }
+
+    // ===== Title Line Animation =====
+    function initTitleLineAnimation() {
+      const titleLines = document.querySelectorAll('.title-line');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.width = '100%';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      titleLines.forEach(line => {
+        line.style.width = '0';
+        line.style.transition = 'width 0.8s ease';
+        observer.observe(line);
+      });
+    }
+
+    // ===== Page Visibility Change Handler =====
+    document.addEventListener('visibilitychange', () => {
+      const particles = document.querySelectorAll('.particle');
+      if (document.hidden) {
+        // Pause animation when page is hidden (save resources)
+        particles.forEach(p => {
+          p.style.animationPlayState = 'paused';
+        });
+      } else {
+        // Resume animation when page is visible
+        particles.forEach(p => {
+          p.style.animationPlayState = 'running';
+        });
+      }
+    });
+
+    // ===== Window Resize Handler =====
+    window.addEventListener('resize', () => {
+      // Close mobile menu on larger screens
+      if (window.innerWidth > 992) {
+        mobileMenuBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== Back to Top Button =====
+    function initBackToTop() {
+      const backToTopBtn = document.createElement('button');
+      backToTopBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+      backToTopBtn.setAttribute('aria-label', 'Back to top');
+      backToTopBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: #000;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 240, 255, 0.4);
+      `;
+      
+      document.body.appendChild(backToTopBtn);
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          backToTopBtn.style.opacity = '1';
+          backToTopBtn.style.transform = 'translateY(0)';
+        } else {
+          backToTopBtn.style.opacity = '0';
+          backToTopBtn.style.transform = 'translateY(100px)';
+        }
+      });
+
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      backToTopBtn.addEventListener('mouseenter', () => {
+        backToTopBtn.style.transform = 'translateY(0) scale(1.1)';
+        backToTopBtn.style.boxShadow = '0 8px 30px rgba(0, 240, 255, 0.6)';
+      });
+
+      backToTopBtn.addEventListener('mouseleave', () => {
+        backToTopBtn.style.transform = 'translateY(0) scale(1)';
+        backToTopBtn.style.boxShadow = '0 5px 20px rgba(0, 240, 255, 0.4)';
+      });
+    }
+
+    // ===== Copy Link Feature =====
+    function initCopyLink() {
+      const copyBtn = document.createElement('button');
+      copyBtn.innerHTML = '<i class="fa-solid fa-link"></i> Copy Link';
+      copyBtn.setAttribute('aria-label', 'Copy page link');
+      copyBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        padding: 12px 20px;
+        background: rgba(0, 240, 255, 0.1);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        border-radius: 30px;
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      `;
+      
+      document.body.appendChild(copyBtn);
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          copyBtn.style.opacity = '1';
+          copyBtn.style.transform = 'translateY(0)';
+        } else {
+          copyBtn.style.opacity = '0';
+          copyBtn.style.transform = 'translateY(100px)';
+        }
+      });
+
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+          copyBtn.style.background = 'rgba(0, 255, 136, 0.2)';
+          copyBtn.style.borderColor = '#00ff88';
+          copyBtn.style.color = '#00ff88';
+          
+          setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fa-solid fa-link"></i> Copy Link';
+            copyBtn.style.background = 'rgba(0, 240, 255, 0.1)';
+            copyBtn.style.borderColor = 'rgba(0, 240, 255, 0.3)';
+            copyBtn.style.color = 'var(--primary-color)';
+          }, 2000);
+        }).catch(() => {
+          copyBtn.innerHTML = '<i class="fa-solid fa-times"></i> Failed';
+          setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fa-solid fa-link"></i> Copy Link';
+          }, 2000);
+        });
+      });
+
+      copyBtn.addEventListener('mouseenter', () => {
+        copyBtn.style.background = 'rgba(0, 240, 255, 0.2)';
+        copyBtn.style.borderColor = 'var(--primary-color)';
+        copyBtn.style.transform = 'translateY(0) scale(1.05)';
+      });
+
+      copyBtn.addEventListener('mouseleave', () => {
+        copyBtn.style.background = 'rgba(0, 240, 255, 0.1)';
+        copyBtn.style.borderColor = 'rgba(0, 240, 255, 0.3)';
+        copyBtn.style.transform = 'translateY(0) scale(1)';
+      });
+    }
+
+    // ===== Print Friendly Mode =====
+    function initPrintMode() {
+      window.addEventListener('beforeprint', () => {
+        document.body.style.background = '#fff';
+        document.querySelectorAll('.particle, .scan-line, .cursor-glow, .grid-bg').forEach(el => {
+          el.style.display = 'none';
+        });
+      });
+
+      window.addEventListener('afterprint', () => {
+        document.body.style.background = '';
+        document.querySelectorAll('.particle, .scan-line, .cursor-glow, .grid-bg').forEach(el => {
+          el.style.display = '';
+        });
+      });
+    }
+
+    // ===== Language Switcher Enhancement =====
+    function initLanguageSwitcher() {
+      const langLinks = document.querySelectorAll('.lang-switcher a');
+      
+      langLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          // Preserve the case ID when switching languages
+          const currentParams = new URLSearchParams(window.location.search);
+          const caseId = currentParams.get('id');
+          
+          if (caseId && !this.href.includes('?id=')) {
+            e.preventDefault();
+            const newUrl = this.href + '?id=' + caseId;
+            window.location.href = newUrl;
+          }
+        });
+      });
+    }
+
+    // ===== Accessibility Improvements =====
+    function initAccessibility() {
+      // Add focus styles for keyboard navigation
+      const style = document.createElement('style');
+      style.textContent = `
+        a:focus, button:focus {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
+        
+        .nav-link:focus {
+          box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.5);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+          
+          .particle, .scan-line {
+            display: none !important;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Add skip link for screen readers
+      const skipLink = document.createElement('a');
+      skipLink.href = '#main-content';
+      skipLink.textContent = 'Skip to main content';
+      skipLink.className = 'skip-link';
+      skipLink.style.cssText = `
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--primary-color);
+        color: #000;
+        padding: 8px 16px;
+        z-index: 10000;
+        transition: top 0.3s ease;
+      `;
+      
+      skipLink.addEventListener('focus', () => {
+        skipLink.style.top = '0';
+      });
+      
+      skipLink.addEventListener('blur', () => {
+        skipLink.style.top = '-40px';
+      });
+      
+      document.body.insertBefore(skipLink, document.body.firstChild);
+      
+      // Add id to main content
+      const mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        mainContent.id = 'main-content';
+      }
+    }
+
+    // ===== Performance Optimization =====
+    function initPerformanceOptimization() {
+      // Lazy load images
+      const images = document.querySelectorAll('img[data-src]');
+      
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+              imageObserver.unobserve(img);
+            }
+          });
+        });
+
+        images.forEach(img => imageObserver.observe(img));
+      } else {
+        // Fallback for older browsers
+        images.forEach(img => {
+          img.src = img.dataset.src;
+        });
+      }
+
+      // Debounce scroll events
+      let scrollTimeout;
+      const originalScrollHandler = window.onscroll;
+      
+      window.addEventListener('scroll', () => {
+        if (scrollTimeout) {
+          window.cancelAnimationFrame(scrollTimeout);
+        }
+        scrollTimeout = window.requestAnimationFrame(() => {
+          // Scroll handling is already optimized in individual functions
+        });
+      }, { passive: true });
+    }
+
+    // ===== Error Handling =====
+    function initErrorHandling() {
+      window.addEventListener('error', (e) => {
+        console.error('Page error:', e.message);
+      });
+
+      // Handle image load errors
+      document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', function() {
+          this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250"><rect fill="%230a0a1a" width="400" height="250"/><text fill="%2300f0ff" font-family="sans-serif" font-size="16" x="50%" y="50%" text-anchor="middle" dy=".3em">Image not available</text></svg>';
+          this.alt = 'Image not available';
+        });
+      });
+    }
+
+    // ===== Analytics Helper (Optional) =====
+    function trackEvent(category, action, label) {
+      // Placeholder for analytics tracking
+      console.log(`📊 Event: ${category} - ${action} - ${label}`);
+      
+      // If using Google Analytics:
+      // if (typeof gtag !== 'undefined') {
+      //   gtag('event', action, {
+      //     'event_category': category,
+      //     'event_label': label
+      //   });
+      // }
+    }
+
+    // ===== Initialize All Effects =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // Core functionality
+      createParticles();
+      
+      // Interactive effects
+      initCardEffects();
+      initTagEffects();
+      animateListItems();
+      initRelatedCaseEffects();
+      initImageEffects();
+      initListIconEffects();
+      initTitleLineAnimation();
+      
+      // Button effects
+      initBackButtonEffect();
+      initRippleEffect();
+      
+      // Navigation & interaction
+      initSocialEffects();
+      initFooterEffects();
+      initSmoothScroll();
+      initKeyboardNav();
+      initLanguageSwitcher();
+      
+      // Page animations
+      initScrollReveal();
+      
+      // Utility features
+      initBackToTop();
+      initCopyLink();
+      initPrintMode();
+      
+      // Accessibility & Performance
+      initAccessibility();
+      initPerformanceOptimization();
+      initErrorHandling();
+      
+      // Track page view
+      trackEvent('Page', 'View', caseData.title);
+      
+      console.log('🚀 Case detail page initialized!');
+      console.log('📊 Current case:', caseData.title);
+      console.log('🌐 Language: English');
+    });
+
+    // ===== Service Worker Registration (Optional for PWA) =====
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // navigator.serviceWorker.register('/sw.js')
+        //   .then(reg => console.log('SW registered'))
+        //   .catch(err => console.log('SW registration failed'));
+      });
+    }
   </script>
 </body>
 </html>
