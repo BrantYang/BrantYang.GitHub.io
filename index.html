@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器视觉工程师 | Machine Vision Engineer</title>
+    <script>
+        // 根据浏览器语言自动跳转
+        function detectLanguage() {
+            var lang = navigator.language || navigator.userLanguage;
+            if (lang.startsWith('zh')) {
+                window.location.href = './zh/index.html';
+            } else {
+                window.location.href = './en/index.html';
+            }
+        }
+        detectLanguage();
+    </script>
+</head>
+<body>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: Arial, sans-serif; background: #0a0a1a; color: #e0e0e0;">
+        <h1>正在跳转... / Redirecting...</h1>
+        <p>如果没有自动跳转，请选择语言 / If not redirected, please select:</p>
+        <div style="margin-top: 20px;">
+            <a href="./zh/index.html" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 18px;">中文</a>
+            <a href="./en/index.html" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 18px;">English</a>
+        </div>
+    </div>
+</body>
+</html>

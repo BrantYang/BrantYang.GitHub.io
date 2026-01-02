@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -216,7 +216,7 @@
   <!-- ============================================== -->
   <!-- 关键点：先引入数据 JS，再引入逻辑 JS -->
   <!-- ============================================== -->
-  <script src="Tools/tools_data.js"></script>
+  <script src="../Tools/tools_data.js"></script>
 
   <script>
     // ===== 全局变量 =====
@@ -278,9 +278,9 @@
             // 生成标签 HTML
             const tagsHtml = tool.tags.map(tag => `<span class="badge-cyber">${tag}</span>`).join('');
 
-            // 构造文件名路径 (自动加上 Tools/ 前缀)
+            // 构造文件名路径 (自动加上 ../Tools/ 前缀)
             // 如果 filename 是 "#"，则禁用链接
-            const href = tool.filename === '#' ? 'javascript:void(0)' : `Tools/${tool.filename}`;
+            const href = tool.filename === '#' ? 'javascript:void(0)' : `../Tools/${tool.filename}`;
             const opacityStyle = tool.filename === '#' ? 'opacity: 0.6;' : ''; // 开发中的项目半透明
 
             // 构造 HTML 卡片 string

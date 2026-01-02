@@ -1,0 +1,48 @@
+# Jekyll Configuration for Pure Static HTML Site
+# This configuration disables Jekyll processing to serve pure HTML/CSS/JS files
+
+markdown: kramdown
+highlighter: rouge
+
+# Enable safe mode to disable custom plugins
+safe: true
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - LICENSE
+  - roadmap.md
+  - .git/
+  - .gitignore
+
+# Include all static assets
+include:
+  - "**/*.html"
+  - "**/*.css"
+  - "**/*.js"
+  - "**/*.svg"
+  - "**/*.png"
+  - "**/*.jpg"
+  - "**/*.jpeg"
+  - "**/*.gif"
+  - "**/*.ico"
+
+# Disable Jekyll plugins and themes
+plugins: []
+theme: null
+
+# Set base URL (if needed)
+baseurl: ""
+url: "https://brantyang.github.io"
+
+# Permalink structure (not needed for pure HTML, but set just in case)
+permalink: none
+
+# Ignore default layouts
+layouts_dir: null
+data_dir: null
+includes_dir: null
+
+# Sass configuration (if using SCSS in future)
+sass:
+  style: compressed
